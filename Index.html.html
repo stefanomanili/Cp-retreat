@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<meta name="supported-color-schemes" content="light">
+<title>Cosaporto · Sales Workshop</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+  :root, html, body {
+    color-scheme: light;
+  }
+
+  :root {
+    --bg: #f7f5f0;
+    --surface: #ffffff;
+    --surface2: #eeebe4;
+    --border: #dedad2;
+    --accent: #b8941e;
+    --accent2: #c97a3a;
+    --text: #1a1814;
+    --muted: #5e5a54;
+    --success: #3a7a50;
+    --danger: #c0503a;
+    --tag-bg: #e8e4dc;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    background: #f7f5f0;
+    color: #1a1814;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    letter-spacing: -0.3px;
+    color: var(--text);
+  }
+  .logo span { color: var(--accent); }
+
+  .badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  /* ── NAV ── */
+  nav {
+    display: flex;
+    gap: 4px;
+    padding: 0 32px;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+
+  .nav-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 14px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+    letter-spacing: 0.01em;
+  }
+  .nav-btn:hover { color: var(--text); }
+  .nav-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* ── SECTIONS ── */
+  .section { display: none; padding: 40px 32px; max-width: 900px; margin: 0 auto; }
+  .section.active { display: block; }
+
+  /* ── TYPOGRAPHY ── */
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    letter-spacing: -0.2px;
+    margin-bottom: 12px;
+  }
+  h3 {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 15px;
+    margin-bottom: 36px;
+    max-width: 560px;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .card:hover { border-color: #3a3a36; }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 4px;
+    background: var(--tag-bg);
+    color: var(--muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .tag.hot { background: #fde8d8; color: #a0521a; }
+  .tag.soft { background: #d8f0e0; color: #2a6a40; }
+  .tag.hard { background: #fde0dc; color: #a03020; }
+  .tag.accent { background: #fdf0c0; color: #8a6a10; }
+
+  /* ── AGENDA ── */
+  .agenda-row {
+    display: flex;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .agenda-row:last-child { border-bottom: none; }
+
+  .agenda-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    min-width: 80px;
+    margin-top: 2px;
+  }
+
+  .agenda-content { flex: 1; }
+  .agenda-title { font-weight: 600; margin-bottom: 4px; }
+  .agenda-desc { color: var(--muted); font-size: 13px; }
+
+  .agenda-pill {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--tag-bg);
+    color: var(--muted);
+    margin-left: 8px;
+  }
+
+  /* ── OBJECTIONS ── */
+  .obj-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+
+  .obj-trigger {
+    background: var(--surface);
+    padding: 16px 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    transition: background 0.12s;
+  }
+  .obj-trigger:hover { background: var(--surface2); }
+
+  .obj-quote {
+    font-style: italic;
+    color: var(--text);
+    font-size: 14px;
+    flex: 1;
+  }
+  .obj-quote::before { content: '"'; }
+  .obj-quote::after  { content: '"'; }
+
+  .chevron {
+    color: var(--muted);
+    font-size: 12px;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .obj-card.open .chevron { transform: rotate(180deg); }
+
+  .obj-body {
+    display: none;
+    background: var(--surface2);
+    padding: 20px;
+    border-top: 1px solid var(--border);
+  }
+  .obj-card.open .obj-body { display: block; }
+
+  .obj-step {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 14px;
+    align-items: flex-start;
+  }
+  .obj-step:last-child { margin-bottom: 0; }
+
+  .step-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #8a6a10;
+    background: #fdf0c0;
+    border-radius: 4px;
+    padding: 2px 7px;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .obj-script {
+    background: #fff8f0;
+    border-left: 3px solid var(--accent2);
+    padding: 10px 14px;
+    border-radius: 0 6px 6px 0;
+    font-size: 13px;
+    margin-top: 6px;
+    font-style: italic;
+    color: #4a3828;
+  }
+
+  /* ── ROLE PLAY ── */
+  .rp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 600px) { .rp-grid { grid-template-columns: 1fr; } }
+
+  .rp-field { }
+  .rp-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .rp-value {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .rp-scenario-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  .rp-dots {
+    display: flex;
+    gap: 6px;
+  }
+  .rp-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .rp-dot.active { background: var(--accent); }
+
+  .btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.12s, border-color 0.12s;
+  }
+  .btn:hover { background: var(--surface2); border-color: #3a3a36; }
+  .btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0f0f0e;
+  }
+  .btn.primary:hover { background: #d4b33e; border-color: #d4b33e; }
+
+  /* ── TIMER ── */
+  .timer-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+  }
+
+  .timer-display {
+    font-family: 'DM Mono', monospace;
+    font-size: 80px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: -2px;
+    margin: 24px 0;
+    line-height: 1;
+  }
+  .timer-display.warning { color: var(--accent2); }
+  .timer-display.danger  { color: var(--danger); }
+
+  .timer-label {
+    font-size: 13px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 32px;
+  }
+
+  .timer-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+
+  .timer-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .timer-ring {
+    width: 200px;
+    height: 200px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .timer-ring svg {
+    position: absolute;
+    top: 0; left: 0;
+    transform: rotate(-90deg);
+  }
+  .timer-ring-inner { z-index: 1; text-align: center; }
+
+  circle.bg { fill: none; stroke: #e8e4dc; stroke-width: 6; }
+  circle.progress {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 6;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1s linear, stroke 0.3s;
+  }
+
+  /* ── PLAYBOOK ── */
+  .playbook-rule {
+    display: flex;
+    gap: 16px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .playbook-rule:last-child { border-bottom: none; }
+
+  .rule-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    color: #c8c4bc;
+    line-height: 1;
+    min-width: 44px;
+    margin-top: -4px;
+  }
+
+  .rule-body h2 { font-size: 17px; margin-bottom: 6px; }
+  .rule-body p  { color: var(--muted); font-size: 14px; line-height: 1.65; }
+
+  .rule-example {
+    margin-top: 10px;
+    background: #fff8ec;
+    border-left: 3px solid var(--accent);
+    padding: 10px 14px;
+    border-radius: 0 6px 6px 0;
+    font-size: 13px;
+    font-style: italic;
+    color: #4a3a18;
+  }
+
+  /* ── FEEDBACK ── */
+  .score-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .score-item { }
+  .score-name {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .score-stars { display: flex; gap: 4px; }
+  .star {
+    cursor: pointer;
+    font-size: 20px;
+    color: #d0ccc4;
+    transition: color 0.1s;
+    user-select: none;
+  }
+  .star.lit { color: var(--accent); }
+
+  .feedback-note {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    resize: vertical;
+    min-height: 80px;
+    margin-bottom: 12px;
+  }
+  .feedback-note:focus { outline: none; border-color: var(--accent); }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 32px 0;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 48px 0 32px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+  }
+
+  .hero-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .stat-row {
+    display: flex;
+    gap: 32px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .stat { }
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--text);
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: #f7f5f0; }
+  ::-webkit-scrollbar-thumb { background: #dedad2; border-radius: 3px; }
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Cosaporto <span>·</span> Sales</div>
+  <div class="badge">Retreat Workshop</div>
+</header>
+
+<nav id="nav">
+  <button class="nav-btn active" onclick="showSection('agenda', this)">Agenda</button>
+  <button class="nav-btn" onclick="showSection('playbook', this)">Playbook</button>
+  <button class="nav-btn" onclick="showSection('scenari', this)">Scenari Role Play</button>
+  <button class="nav-btn" onclick="showSection('obiezioni', this)">Gestione Obiezioni</button>
+  <button class="nav-btn" onclick="showSection('feedback', this)">Scheda Feedback</button>
+  <button class="nav-btn" onclick="showSection('timer', this)">⏱ Timer</button>
+</nav>
+
+<!-- ══════════ AGENDA ══════════ -->
+<section class="section active" id="agenda">
+  <div class="hero">
+    <div class="hero-tag">Cosaporto · Sales Workshop</div>
+    <h1>Vendere meglio,<br><em>insieme.</em></h1>
+    <p class="subtitle">Una sessione pratica sulle tecniche di vendita B2B applicate al nostro contesto: catering aziendale, gifting e eventi corporate.</p>
+    <div class="stat-row">
+      <div class="stat">
+        <div class="stat-num">3h</div>
+        <div class="stat-label">Durata totale</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">4</div>
+        <div class="stat-label">Moduli</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">6</div>
+        <div class="stat-label">Scenari di role play</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Programma della giornata</h3>
+
+  <div class="agenda-row">
+    <div class="agenda-time">00:00</div>
+    <div class="agenda-content">
+      <div class="agenda-title">Pitch Roulette <span class="agenda-pill">Warm-up</span></div>
+      <div class="agenda-desc">Ogni persona ha 60 secondi per pitchare Cosaporto a un cliente estratto a sorte. Rompe il ghiaccio, fa emergere stili diversi.</div>
+    </div>
+  </div>
+
+  <div class="agenda-row">
+    <div class="agenda-time">00:20</div>
+    <div class="agenda-content">
+      <div class="agenda-title">Discovery Call <span class="agenda-pill">Workshop</span></div>
+      <div class="agenda-desc">Come fare le domande giuste per capire budget, ricorrenza e chi decide davvero. Esercizio: mappa del decisore.</div>
+    </div>
+  </div>
+
+  <div class="agenda-row">
+    <div class="agenda-time">00:40</div>
+    <div class="agenda-content">
+      <div class="agenda-title">Gestione delle Obiezioni <span class="agenda-pill">Workshop</span></div>
+      <div class="agenda-desc">"Abbiamo già un fornitore", "costa troppo", "devo sentire altri". Tecniche e script per le 8 obiezioni più comuni.</div>
+    </div>
+  </div>
+
+  <div class="agenda-row">
+    <div class="agenda-time">01:00</div>
+    <div class="agenda-content">
+      <div class="agenda-title">Pausa <span class="agenda-pill">15 min</span></div>
+      <div class="agenda-desc">Breve break.</div>
+    </div>
+  </div>
+
+  <div class="agenda-row">
+    <div class="agenda-time">01:15</div>
+    <div class="agenda-content">
+      <div class="agenda-title">Role Play a squadre <span class="agenda-pill">Esercizio principale</span></div>
+      <div class="agenda-desc">Squadre da 3–4 persone. Ogni squadra affronta 3 scenari reali Cosaporto. Si ruotano i ruoli: venditore, cliente difficile, osservatore.</div>
+    </div>
+  </div>
+
+  <div class="agenda-row">
+    <div class="agenda-time">02:15</div>
+    <div class="agenda-content">
+      <div class="agenda-title">Debrief collettivo + costruzione Playbook <span class="agenda-pill">Chiusura</span></div>
+      <div class="agenda-desc">Ogni squadra condivide la tecnica che ha funzionato meglio. Si costruisce insieme la versione definitiva del Cosaporto Sales Playbook.</div>
+    </div>
+  </div>
+
+  <div class="agenda-row">
+    <div class="agenda-time">02:45</div>
+    <div class="agenda-content">
+      <div class="agenda-title">Chiusura e next steps</div>
+      <div class="agenda-desc">Impegni concreti: ognuno sceglie 1 tecnica da applicare nella prossima settimana.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ PLAYBOOK ══════════ -->
+<section class="section" id="playbook">
+  <h1>Cosaporto<br><em>Sales Playbook</em></h1>
+  <p class="subtitle">Le 8 regole fondamentali per vendere catering B2B, gifting aziendale ed eventi corporate.</p>
+  <hr class="divider">
+
+  <div class="playbook-rule">
+    <div class="rule-num">1</div>
+    <div class="rule-body">
+      <h2>Trova il vero decisore prima di tutto</h2>
+      <p>In azienda chi risponde al telefono raramente decide. Mappa sempre: chi usa il servizio, chi lo approva, chi firma il budget. Parla con tutti e tre.</p>
+      <div class="rule-example">"Chi si occupa di questo internamente? C'è un responsabile acquisti o è una decisione che passa dal direttore?"</div>
+    </div>
+  </div>
+
+  <div class="playbook-rule">
+    <div class="rule-num">2</div>
+    <div class="rule-body">
+      <h2>Vendi il risultato, non il menu</h2>
+      <p>Il cliente non compra cibo — compra un momento riuscito, un team soddisfatto, un fornitore affidabile. Collegati sempre a un obiettivo aziendale.</p>
+      <div class="rule-example">"Il vostro obiettivo è far sentire il team valorizzato durante gli all-hands. Noi ci assicuriamo che quell'ora funzioni, sempre."</div>
+    </div>
+  </div>
+
+  <div class="playbook-rule">
+    <div class="rule-num">3</div>
+    <div class="rule-body">
+      <h2>La prima call è di ascolto, non di pitch</h2>
+      <p>Dedica i primi 10 minuti a capire: quante persone, con quale frequenza, che budget approssimativo, esperienze precedenti. Poi proponi.</p>
+      <div class="rule-example">"Prima di mostrarvi cosa facciamo, vorrei capire come funziona da voi oggi. Avete un fornitore attuale o state cercando da zero?"</div>
+    </div>
+  </div>
+
+  <div class="playbook-rule">
+    <div class="rule-num">4</div>
+    <div class="rule-body">
+      <h2>Qualifica il budget senza imbarazzo</h2>
+      <p>Non aspettare il preventivo per scoprire che siete fuori scala. Chiedi l'ordine di grandezza in modo naturale e professionale.</p>
+      <div class="rule-example">"Per darvi un'idea di cosa possiamo costruire: avete in mente una fascia di spesa, anche approssimativa? Aiuta tantissimo per la proposta."</div>
+    </div>
+  </div>
+
+  <div class="playbook-rule">
+    <div class="rule-num">5</div>
+    <div class="rule-body">
+      <h2>Usa la prova sociale locale</h2>
+      <p>Citare clienti noti dello stesso settore o della stessa città abbassa la guardia e costruisce fiducia velocemente.</p>
+      <div class="rule-example">"Lavoriamo già con diverse aziende nel vostro settore qui a Milano — posso farvi fare una chiacchierata con un loro referente se volete."</div>
+    </div>
+  </div>
+
+  <div class="playbook-rule">
+    <div class="rule-num">6</div>
+    <div class="rule-body">
+      <h2>Chiudi sempre con un passo successivo concreto</h2>
+      <p>Ogni conversazione deve finire con un'azione schedulata, non con un "vi mando qualcosa". Data, ora, chi ci sarà.</p>
+      <div class="rule-example">"Perfetto. Vi mando il preventivo entro giovedì — possiamo sentirci venerdì alle 15 per cinque minuti di feedback?"</div>
+    </div>
+  </div>
+
+  <div class="playbook-rule">
+    <div class="rule-num">7</div>
+    <div class="rule-body">
+      <h2>Il follow-up è il vero lavoro</h2>
+      <p>L'80% delle vendite B2B si chiude al quinto contatto. Non mollare dopo il primo silenzio. Cambia canale, cambia angolo, porta valore ogni volta.</p>
+      <div class="rule-example">"Le scrivo perché ho appena letto che la vostra azienda sta crescendo molto — magari ora i numeri sono cambiati rispetto a quando ci siamo sentiti."</div>
+    </div>
+  </div>
+
+  <div class="playbook-rule">
+    <div class="rule-num">8</div>
+    <div class="rule-body">
+      <h2>Fai dell'upsell una cura, non una vendita</h2>
+      <p>Dopo il primo ordine, proponi upgrade o servizi complementari come consigli basati sulla loro esperienza, non come tentativo commerciale.</p>
+      <div class="rule-example">"Guardando la vostra ricorrenza mensile, potrebbe avere senso valutare il pacchetto gifting per il Q4 — spesso i clienti lo trovano molto comodo da gestire tutto con noi."</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ SCENARI ROLE PLAY ══════════ -->
+<section class="section" id="scenari">
+  <h1>Scenari<br><em>Role Play</em></h1>
+  <p class="subtitle">6 situazioni reali tratte dal contesto Cosaporto. Ogni squadra ne affronta 2–3 a rotazione.</p>
+
+  <div class="rp-scenario-nav">
+    <button class="btn" onclick="prevScenario()">← Precedente</button>
+    <div class="rp-dots" id="rp-dots"></div>
+    <button class="btn" onclick="nextScenario()">Successivo →</button>
+  </div>
+
+  <div id="scenario-card"></div>
+</section>
+
+<!-- ══════════ OBIEZIONI ══════════ -->
+<section class="section" id="obiezioni">
+  <h1>Gestione<br><em>Obiezioni</em></h1>
+  <p class="subtitle">Le 8 obiezioni più frequenti nella vendita B2B Cosaporto — con tecnica, motivazione reale e script suggerito. Clicca per espandere.</p>
+  <hr class="divider">
+
+  <div id="obiezioni-list"></div>
+</section>
+
+<!-- ══════════ FEEDBACK ══════════ -->
+<section class="section" id="feedback">
+  <h1>Scheda<br><em>Feedback</em></h1>
+  <p class="subtitle">Da compilare dopo ogni role play. L'osservatore valuta il venditore su 5 dimensioni.</p>
+  <hr class="divider">
+
+  <div class="card">
+    <h3>Valutazione del venditore</h3>
+    <div class="score-grid" id="score-grid"></div>
+    <hr class="divider" style="margin:16px 0">
+    <h3 style="margin-bottom:10px">Cosa ha funzionato</h3>
+    <textarea class="feedback-note" placeholder="Es. ha ascoltato molto, ha qualificato il budget, non si è perso sull'obiezione del prezzo..."></textarea>
+    <h3 style="margin-bottom:10px">Cosa migliorare</h3>
+    <textarea class="feedback-note" placeholder="Es. non ha chiuso con un passo successivo, ha dato troppa informazione troppo presto..."></textarea>
+    <h3 style="margin-bottom:10px">La tecnica migliore usata</h3>
+    <textarea class="feedback-note" placeholder="Una frase o gesto specifico che ha colpito l'osservatore..." style="min-height:54px"></textarea>
+    <div style="display:flex;gap:10px;margin-top:4px">
+      <button class="btn primary" onclick="printFeedback()">Stampa / Salva PDF</button>
+      <button class="btn" onclick="resetFeedback()">Reset</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ TIMER ══════════ -->
+<section class="section" id="timer">
+  <h1>Timer<br><em>Workshop</em></h1>
+  <p class="subtitle">Usa il timer durante i role play o le presentazioni. Il colore cambia con l'avvicinarsi della fine.</p>
+
+  <div class="timer-wrap">
+    <div class="timer-presets">
+      <button class="btn" onclick="setTimer(60)">1 min</button>
+      <button class="btn" onclick="setTimer(120)">2 min</button>
+      <button class="btn" onclick="setTimer(300)">5 min</button>
+      <button class="btn" onclick="setTimer(600)">10 min</button>
+      <button class="btn" onclick="setTimer(900)">15 min</button>
+    </div>
+
+    <div class="timer-ring">
+      <svg width="200" height="200" viewBox="0 0 200 200">
+        <circle class="bg" cx="100" cy="100" r="88"/>
+        <circle class="progress" id="timer-circle" cx="100" cy="100" r="88"
+          stroke-dasharray="553" stroke-dashoffset="0"/>
+      </svg>
+      <div class="timer-ring-inner">
+        <div class="timer-display" id="timer-display">05:00</div>
+      </div>
+    </div>
+
+    <div class="timer-label" id="timer-label">Pronto</div>
+
+    <div class="timer-controls">
+      <button class="btn primary" onclick="startTimer()" id="btn-start">Avvia</button>
+      <button class="btn" onclick="pauseTimer()" id="btn-pause" style="display:none">Pausa</button>
+      <button class="btn" onclick="resetTimer()">Reset</button>
+    </div>
+  </div>
+</section>
+
+<script>
+// ── NAV ──
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── OBIEZIONI DATA ──
+const obiezioni = [
+  {
+    quote: "Abbiamo già un fornitore con cui siamo soddisfatti",
+    tag: "hard",
+    tagLabel: "Frequente",
+    motivazione: "Non è un rifiuto — è una porta semi-aperta. Il cliente vuole sicurezza prima di rischiare un cambiamento.",
+    steps: [
+      { label: "Riconosci", text: "Normale avere un fornitore di riferimento. Significa che il tema è importante per voi." },
+      { label: "Domanda", text: "C'è qualcosa che oggi vorreste migliorare, anche solo su un aspetto — flessibilità, varietà, gestione last minute?" },
+      { label: "Proponi pilota", text: "Capisco la riluttanza a cambiare. Potremmo partire da un singolo evento o da una città dove magari avete meno copertura?" },
+    ],
+    script: "Ottimo segno che abbiate già strutturato questo. Non voglio sostituire nessuno — ma spesso lavoriamo in affiancamento, soprattutto su eventi specifici o città dove il vostro fornitore non arriva."
+  },
+  {
+    quote: "Costa troppo rispetto agli altri",
+    tag: "hard",
+    tagLabel: "Frequente",
+    motivazione: "Spesso è una richiesta di giustificazione del valore, non un vero blocco sul budget.",
+    steps: [
+      { label: "Non difenderti", text: "Non entrare in una battaglia sul prezzo. Chiedi cosa include il confronto." },
+      { label: "Esplora", text: "Il preventivo che avete ricevuto include la logistica, il personale, il servizio post-evento?" },
+      { label: "Riposiziona", text: "Il nostro prezzo include [X, Y, Z]. Confrontando le stesse voci, siamo spesso in linea." },
+    ],
+    script: "Capisco. Può succedere che a prima vista sembri più alto. Mi aiuta a capire cosa include il preventivo che avete ricevuto? A volte le voci non sono comparabili 1:1."
+  },
+  {
+    quote: "Devo sentire altri fornitori prima di decidere",
+    tag: "soft",
+    tagLabel: "Normale",
+    motivazione: "È una risposta di processo, non di disinteresse. Serve aiutarlo a capire perché Cosaporto dovrebbe essere la scelta finale.",
+    steps: [
+      { label: "Valida", text: "Assolutamente, ha senso fare un confronto." },
+      { label: "Differenzia ora", text: "Per facilitarvi, vi posso anticipare i punti su cui ci differenziamo di più." },
+      { label: "Tieni la porta", text: "Quando avrete i preventivi, mi dite dove siamo fuori linea — ci piacerebbe restare in corsa." },
+    ],
+    script: "Ottima idea. Mentre fate il giro, teneteci in considerazione soprattutto per [punto di forza 1] e [punto di forza 2]. Quando avete tutto, sono disponibile per un rapido confronto."
+  },
+  {
+    quote: "Non è il momento giusto, magari a settembre",
+    tag: "soft",
+    tagLabel: "Rinvio",
+    motivazione: "Spesso è una gentile via di uscita. Ma a volte è reale — il calendario aziendale ha ritmi precisi.",
+    steps: [
+      { label: "Rispetta", text: "Perfetto, settembre è un momento classico per riprendere i piani." },
+      { label: "Pianta un seme", text: "Nel frattempo posso mandarvi un caso studio di un'azienda simile alla vostra?" },
+      { label: "Prenota il futuro", text: "Possiamo già mettere in agenda una call a inizio settembre, così non si perde?" },
+    ],
+    script: "Capito, rispetto i vostri tempi. Possiamo metterci in agenda per la prima settimana di settembre? Così partiamo con tutto pronto."
+  },
+  {
+    quote: "Devo chiedere l'approvazione al mio responsabile",
+    tag: "accent",
+    tagLabel: "Decisore",
+    motivazione: "Stai parlando con chi usa il servizio, non con chi decide. Non è un'obiezione — è un segnale che devi allargare la conversazione.",
+    steps: [
+      { label: "Riconosci", text: "Certo, è normale. Come funziona di solito il processo di approvazione?" },
+      { label: "Offri materiale", text: "Posso preparare una sintesi di 1 pagina da girare al responsabile?" },
+      { label: "Chiedi un intro", text: "Sarebbe possibile coinvolgerlo in una call breve? Spesso aiuta rispondere alle sue domande direttamente." },
+    ],
+    script: "Assolutamente comprensibile. Vuole che le prepari una sintesi con i punti chiave — costo, logistica, referenze — da condividere con il suo responsabile?"
+  },
+  {
+    quote: "Non ho tempo adesso",
+    tag: "soft",
+    tagLabel: "Timing",
+    motivazione: "Spesso è un rifiuto mascherato da agenda. La chiave è essere brevi e proporre qualcosa di minimo.",
+    steps: [
+      { label: "Rispetta subito", text: "Capito, non è il momento. Ci vogliono 90 secondi per dirle una cosa sola che potrebbe interessarle — posso?" },
+      { label: "Mini-pitch", text: "Se no, quando posso richiamare? Mattina o pomeriggio?" },
+    ],
+    script: "Capisco. Mi basta un minuto per lasciarle un'idea — se non è rilevante la smetto subito. Posso?"
+  },
+  {
+    quote: "Lo facciamo internamente / ci pensa il nostro ufficio acquisti",
+    tag: "hard",
+    tagLabel: "Struttura interna",
+    motivazione: "Il cliente ha già una soluzione ma potrebbe non essere soddisfatto o potrebbe avere bisogno di supporto per scale o eventi speciali.",
+    steps: [
+      { label: "Valida", text: "Ottimo — avere una struttura interna è un vantaggio." },
+      { label: "Cerca il gap", text: "Capita di avere picchi di richiesta, eventi fuori sede o città dove non avete copertura?" },
+      { label: "Proponi complementarietà", text: "Molti nostri clienti usano Cosaporto proprio per queste eccezioni, senza sostituire niente." },
+    ],
+    script: "Ha senso. Noi lavoriamo spesso come supporto nelle situazioni straordinarie — eventi speciali, picchi, città secondarie. Posso lasciarle un contatto per quando serve?"
+  },
+  {
+    quote: "Mandatemi un'email con i dettagli",
+    tag: "soft",
+    tagLabel: "Rinvio",
+    motivazione: "Un modo educato per chiudere la conversazione senza dire no. Serve ancorare qualcosa di concreto.",
+    steps: [
+      { label: "Accetta e ancora", text: "Certo, gliela mando oggi stesso. Prima di farlo, ho due domande veloci per personalizzarla." },
+      { label: "Qualifica", text: "Quante persone mediamente, e con che frequenza pensate di avere bisogno del servizio?" },
+      { label: "Prenota il follow-up", text: "Le mando l'email e mi permetto di richiamarla giovedì mattina — va bene?" },
+    ],
+    script: "Certamente. Per mandarle qualcosa di utile e non generico: parliamo di quante persone approssimativamente? Così la proposta è già calibrata."
+  }
+];
+
+// ── RENDER OBIEZIONI ──
+function renderObiezioni() {
+  const container = document.getElementById('obiezioni-list');
+  container.innerHTML = obiezioni.map((obj, i) => `
+    <div class="obj-card" id="obj-${i}">
+      <div class="obj-trigger" onclick="toggleObj(${i})">
+        <div style="display:flex;align-items:center;gap:10px;flex:1">
+          <span class="tag ${obj.tag}">${obj.tagLabel}</span>
+          <span class="obj-quote">${obj.quote}</span>
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="obj-body">
+        <div style="margin-bottom:14px">
+          <div class="rp-label" style="margin-bottom:6px">Perché lo dicono davvero</div>
+          <div style="color:var(--muted);font-size:13px">${obj.motivazione}</div>
+        </div>
+        <div class="rp-label" style="margin-bottom:10px">Come rispondere</div>
+        ${obj.steps.map((s, j) => `
+          <div class="obj-step">
+            <span class="step-num">${j+1}. ${s.label}</span>
+            <div>${s.text}</div>
+          </div>
+        `).join('')}
+        <div class="rp-label" style="margin:14px 0 6px">Script suggerito</div>
+        <div class="obj-script">${obj.script}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleObj(i) {
+  const card = document.getElementById(`obj-${i}`);
+  card.classList.toggle('open');
+}
+
+// ── SCENARI DATA ──
+const scenari = [
+  {
+    num: "01",
+    tag: "Catering ricorrente",
+    tagClass: "soft",
+    titolo: "Il pranzo mensile che non decolla",
+    contesto: "Ufficio di consulenza, 45 persone a Milano. L'HR manager ha già un fornitore attuale ma riceve lamentele sul cibo.",
+    ruolo_venditore: "Commercial Manager Cosaporto. Stai chiamando in cold (hai trovato il contatto su LinkedIn).",
+    ruolo_cliente: "HR Manager. Educata ma di fretta. Ha un fornitore attuale da 2 anni. Non odia il servizio ma non è felicissima.",
+    obiettivo: "Qualificare il lead, capire il pain reale, ottenere una call di approfondimento o una proposta pilota.",
+    difficolta: "Media",
+    obiezione_attesa: "Siamo già coperti, grazie",
+    tip: "Non attaccare il concorrente. Parla di affiancamento su un singolo evento."
+  },
+  {
+    num: "02",
+    tag: "Gifting aziendale",
+    tagClass: "accent",
+    titolo: "Il budget che non c'è (ancora)",
+    contesto: "Azienda tech da 200 dipendenti, Roma. Il Marketing Director vuole fare qualcosa per il Natale ma non ha ancora approvazione dal CFO.",
+    ruolo_venditore: "Account Manager Cosaporto. È un inbound — lui ha compilato il form sul sito.",
+    ruolo_cliente: "Marketing Director. Entusiasta ma senza potere di firma. Deve convincere il CFO con una proposta concreta.",
+    obiettivo: "Costruire una proposta che lui possa portare internamente. Capire budget orientativo e numero destinatari.",
+    difficolta: "Bassa",
+    obiezione_attesa: "Devo aspettare l'ok del mio responsabile",
+    tip: "Aiutalo a vendere internamente. Prepara materiale che lui possa girare al CFO."
+  },
+  {
+    num: "03",
+    tag: "Evento corporate",
+    tagClass: "hot",
+    titolo: "Il confronto prezzi al ribasso",
+    contesto: "Azienda farmaceutica, 80 persone, evento aperitivo a Milano tra 3 settimane. Hanno già un preventivo da un competitor a €18/persona.",
+    ruolo_venditore: "Sales Cosaporto. Call di follow-up dopo aver mandato un preventivo a €26/persona.",
+    ruolo_cliente: "Office Manager. Non è lei la decisore finale ma ha voce in capitolo. Ha già un'alternativa più economica in mano.",
+    obiettivo: "Non fare uno sconto secco. Giustificare il valore, capire cosa include il competitor, trovare un punto di accordo.",
+    difficolta: "Alta",
+    obiezione_attesa: "Gli altri costano meno",
+    tip: "Chiedi cosa include il loro preventivo prima di difendere il tuo prezzo."
+  },
+  {
+    num: "04",
+    tag: "Discovery call",
+    tagClass: "soft",
+    titolo: "Il cliente vago che non sa cosa vuole",
+    contesto: "Studio legale, Torino. 30 persone. Il socio ha sentito parlare di Cosaporto da un amico ma non ha le idee chiare su cosa serve.",
+    ruolo_venditore: "Sales Cosaporto. Prima call. Non sai quasi niente di loro.",
+    ruolo_cliente: "Socio dello studio. Simpatico, disponibile, ma risponde in modo vago. Budget? Non sa. Frequenza? Dipende.",
+    obiettivo: "Fare una discovery call efficace: uscire con almeno 3 info chiave (frequenza, numero persone, budget approssimativo).",
+    difficolta: "Bassa",
+    obiezione_attesa: "Non lo so ancora, dipende...",
+    tip: "Usa domande chiuse per ancorare le risposte vaghe. 'Parliamo di 20 o di 50 persone?' aiuta più di 'quante persone siete?'"
+  },
+  {
+    num: "05",
+    tag: "Upsell / Retention",
+    tagClass: "accent",
+    titolo: "Il cliente attivo che non cresce",
+    contesto: "Cliente Cosaporto da 8 mesi. Ordina catering mensile a Bologna, 20 persone. Non ha mai provato il servizio gifting né eventi.",
+    ruolo_venditore: "Account Manager. Stai facendo una call di check-in periodica.",
+    ruolo_cliente: "Operations Manager. Contenta del servizio attuale. Non pensa di avere altri bisogni — ma non ha esplorato.",
+    obiettivo: "Fare upsell su gifting per fine anno (mancano 4 mesi). Non fare una proposta commerciale aggressiva — fai emergere il bisogno.",
+    difficolta: "Media",
+    obiezione_attesa: "Per ora va bene così",
+    tip: "Parti dal loro calendario. 'Come gestite di solito la fine anno per il team?' apre la porta."
+  },
+  {
+    num: "06",
+    tag: "Cold outreach",
+    tagClass: "hard",
+    titolo: "Il gatekeeper impossibile",
+    contesto: "Grande azienda assicurativa, Milano, 500 persone. Stai chiamando per la terza volta. Non riesci mai ad arrivare al decisore.",
+    ruolo_venditore: "Sales Cosaporto. Hai già mandato 2 email e chiamato una volta. Adesso hai in linea l'assistente di direzione.",
+    ruolo_cliente: "Assistente di direzione. Professionale, fredda. Protegge il responsabile con efficienza.",
+    obiettivo: "Superare il gatekeeper senza essere aggressivo. Ottenere un nome, un'email diretta, o un appuntamento.",
+    difficolta: "Alta",
+    obiezione_attesa: "Le mando io la sua email e le faremo sapere",
+    tip: "Tratta il gatekeeper come un alleato, non come un ostacolo. Chiedi consiglio, non permesso."
+  }
+];
+
+let currentScenario = 0;
+
+function renderScenario() {
+  const s = scenari[currentScenario];
+  document.getElementById('scenario-card').innerHTML = `
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:6px">SCENARIO ${s.num}</div>
+          <h2>${s.titolo}</h2>
+        </div>
+        <span class="tag ${s.tagClass}">${s.tag}</span>
+      </div>
+
+      <div class="rp-grid">
+        <div class="rp-field">
+          <div class="rp-label">Contesto</div>
+          <div class="rp-value">${s.contesto}</div>
+        </div>
+        <div class="rp-field">
+          <div class="rp-label">Difficoltà</div>
+          <div class="rp-value">${s.difficolta}</div>
+        </div>
+        <div class="rp-field">
+          <div class="rp-label">Ruolo — Venditore</div>
+          <div class="rp-value">${s.ruolo_venditore}</div>
+        </div>
+        <div class="rp-field">
+          <div class="rp-label">Ruolo — Cliente</div>
+          <div class="rp-value">${s.ruolo_cliente}</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:12px">
+        <div class="rp-label">Obiettivo del venditore</div>
+        <div class="rp-value" style="background:var(--surface);border-color:var(--accent);border-left:3px solid var(--accent)">${s.obiettivo}</div>
+      </div>
+
+      <div class="rp-grid">
+        <div class="rp-field">
+          <div class="rp-label">Obiezione attesa</div>
+          <div class="rp-value" style="font-style:italic">"${s.obiezione_attesa}"</div>
+        </div>
+        <div class="rp-field">
+          <div class="rp-label">💡 Tip per l'osservatore</div>
+          <div class="rp-value" style="color:var(--accent)">${s.tip}</div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // dots
+  const dots = document.getElementById('rp-dots');
+  dots.innerHTML = scenari.map((_, i) => 
+    `<div class="rp-dot ${i === currentScenario ? 'active' : ''}" onclick="goToScenario(${i})"></div>`
+  ).join('');
+}
+
+function nextScenario() {
+  currentScenario = (currentScenario + 1) % scenari.length;
+  renderScenario();
+}
+function prevScenario() {
+  currentScenario = (currentScenario - 1 + scenari.length) % scenari.length;
+  renderScenario();
+}
+function goToScenario(i) {
+  currentScenario = i;
+  renderScenario();
+}
+
+// ── FEEDBACK ──
+const scoreCategories = [
+  "Ascolto attivo",
+  "Discovery (domande)",
+  "Gestione obiezioni",
+  "Closing & next step",
+  "Linguaggio del corpo / tono"
+];
+
+function renderScoreGrid() {
+  const grid = document.getElementById('score-grid');
+  grid.innerHTML = scoreCategories.map((cat, i) => `
+    <div class="score-item">
+      <div class="score-name">${cat}</div>
+      <div class="score-stars" id="stars-${i}">
+        ${[1,2,3,4,5].map(s => `<span class="star" onclick="setScore(${i},${s})">★</span>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+const scores = {};
+function setScore(cat, val) {
+  scores[cat] = val;
+  const stars = document.querySelectorAll(`#stars-${cat} .star`);
+  stars.forEach((s, i) => {
+    s.classList.toggle('lit', i < val);
+  });
+}
+
+function resetFeedback() {
+  Object.keys(scores).forEach(k => delete scores[k]);
+  renderScoreGrid();
+  document.querySelectorAll('.feedback-note').forEach(t => t.value = '');
+}
+
+function printFeedback() { window.print(); }
+
+// ── TIMER ──
+let timerTotal = 300;
+let timerLeft = 300;
+let timerRunning = false;
+let timerInterval = null;
+const circumference = 2 * Math.PI * 88;
+
+function formatTime(s) {
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+}
+
+function updateTimerDisplay() {
+  const el = document.getElementById('timer-display');
+  const circle = document.getElementById('timer-circle');
+  const label = document.getElementById('timer-label');
+  
+  el.textContent = formatTime(timerLeft);
+  
+  const pct = timerLeft / timerTotal;
+  const offset = circumference * (1 - pct);
+  circle.style.strokeDashoffset = offset;
+
+  el.className = 'timer-display';
+  if (timerLeft <= 30) {
+    el.classList.add('danger');
+    circle.style.stroke = 'var(--danger)';
+  } else if (timerLeft <= 60) {
+    el.classList.add('warning');
+    circle.style.stroke = 'var(--accent2)';
+  } else {
+    circle.style.stroke = 'var(--accent)';
+  }
+
+  if (timerLeft === 0) {
+    label.textContent = '⏰ Tempo scaduto!';
+    stopTimer();
+  } else if (timerRunning) {
+    label.textContent = 'In corso...';
+  } else {
+    label.textContent = timerLeft === timerTotal ? 'Pronto' : 'In pausa';
+  }
+}
+
+function setTimer(s) {
+  stopTimer();
+  timerTotal = s;
+  timerLeft = s;
+  const circle = document.getElementById('timer-circle');
+  circle.style.strokeDashoffset = 0;
+  document.getElementById('timer-label').textContent = 'Pronto';
+  updateTimerDisplay();
+}
+
+function startTimer() {
+  if (timerRunning || timerLeft === 0) return;
+  timerRunning = true;
+  document.getElementById('btn-start').style.display = 'none';
+  document.getElementById('btn-pause').style.display = '';
+  timerInterval = setInterval(() => {
+    timerLeft--;
+    updateTimerDisplay();
+    if (timerLeft === 0) clearInterval(timerInterval);
+  }, 1000);
+}
+
+function pauseTimer() {
+  timerRunning = false;
+  clearInterval(timerInterval);
+  document.getElementById('btn-start').style.display = '';
+  document.getElementById('btn-pause').style.display = 'none';
+  updateTimerDisplay();
+}
+
+function stopTimer() {
+  timerRunning = false;
+  clearInterval(timerInterval);
+  document.getElementById('btn-start').style.display = '';
+  document.getElementById('btn-pause').style.display = 'none';
+}
+
+function resetTimer() {
+  stopTimer();
+  timerLeft = timerTotal;
+  updateTimerDisplay();
+  document.getElementById('timer-label').textContent = 'Pronto';
+}
+
+// ── INIT ──
+renderObiezioni();
+renderScenario();
+renderScoreGrid();
+
+const circle = document.getElementById('timer-circle');
+circle.style.strokeDasharray = circumference;
+circle.style.strokeDashoffset = 0;
+updateTimerDisplay();
+</script>
+</body>
+</html>
