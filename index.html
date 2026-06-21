@@ -50,7 +50,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 60px;
+    height: 80px;
     position: sticky;
     top: 0;
     background: var(--bg);
@@ -58,12 +58,13 @@
   }
 
   .logo {
+    line-height: 1.1;
     font-family: 'DM Serif Display', serif;
-    font-size: 20px;
-    letter-spacing: -0.3px;
+    font-size: 32px;
+    letter-spacing: -0.5px;
     color: var(--text);
   }
-  .logo span { color: var(--accent); }
+  .logo span { color: var(--accent); font-style: italic; }
 
   .badge {
     font-family: 'DM Mono', monospace;
@@ -75,6 +76,21 @@
     padding: 3px 10px;
     border-radius: 20px;
   }
+
+  .header-location {
+    font-size: 13px;
+    margin-top: 3px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .header-link {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .header-link:hover { color: var(--accent); }
+  .header-sep { color: var(--border); }
 
   /* ── NAV ── */
   nav {
@@ -119,6 +135,7 @@
     letter-spacing: -0.5px;
     margin-bottom: 8px;
   }
+  h1 em { color: var(--accent); font-style: italic; }
   h2 {
     font-family: 'DM Serif Display', serif;
     font-size: 22px;
@@ -467,7 +484,7 @@
   .score-stars { display: flex; gap: 4px; }
   .star {
     cursor: pointer;
-    font-size: 20px;
+    font-size: 32px;
     color: #d0ccc4;
     transition: color 0.1s;
     user-select: none;
@@ -540,7 +557,14 @@
 <body>
 
 <header>
-  <div class="logo">Cosa<span>Retreat</span></div>
+  <div>
+    <div class="logo">Cosa<span>Retreat</span></div>
+    <div class="header-location">
+      <a href="https://www.ilcasaledenari.it" target="_blank" class="header-link">Il Casale Denari</a>
+      <span class="header-sep">·</span>
+      <a href="https://maps.google.com/?q=Frazione+Il+Casale+Denari+1,+27047+Santa+Maria+della+Versa,+Pavia" target="_blank" class="header-link">📍 Santa Maria della Versa, Pavia</a>
+    </div>
+  </div>
   <div class="badge">28–29 Luglio 2026</div>
 </header>
 
@@ -556,7 +580,6 @@
 <!-- ══════════ AGENDA ══════════ -->
 <section class="section active" id="agenda">
   <div class="hero">
-    <div class="hero-tag">CosaRetreat · 28–29 Luglio 2026</div>
     <h1>Sky is<br><em>the limit!</em></h1>
     <p class="subtitle">Due giorni per crescere insieme — mindset, vendita, e qualche momento di respiro.</p>
     <div class="stat-row">
@@ -619,7 +642,12 @@
   <div class="agenda-row">
     <div class="agenda-time">21:00</div>
     <div class="agenda-content">
-      <div class="agenda-title">Cena 🍽️</div>
+      <div class="agenda-title">Cena al Ristorante Bazzini 🍽️</div>
+      <div class="agenda-desc">
+        <a href="https://www.ristorantebazzini.com/" target="_blank" class="header-link">ristorantebazzini.com</a>
+        <span class="header-sep"> · </span>
+        <a href="https://maps.google.com/?q=Via+Roma+11,+27044+Canneto+Pavese,+Pavia" target="_blank" class="header-link">📍 Via Roma 11, Canneto Pavese</a>
+      </div>
     </div>
   </div>
 
