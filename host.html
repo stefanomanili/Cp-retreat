@@ -3,142 +3,333 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quiz - La Macchina degli Appuntamenti | Cosaporto (Host)</title>
+<meta name="color-scheme" content="light">
+<title>Quiz · CosaRetreat (Host)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --navy: #282C5C;
-    --navy-mid: #2D3268;
-    --gold: #F5A623;
-    --white: #FFFFFF;
-    --light: #C8D0E8;
-    --grey: #8A90B0;
-    --correct-bg: #1A4A2E;
-    --correct: #4ADE80;
-    --wrong-bg: #4A1A1A;
-    --wrong: #F87171;
+    --bg: #f7f5f0;
+    --surface: #ffffff;
+    --surface2: #eeebe4;
+    --border: #dedad2;
+    --accent: #b8941e;
+    --text: #1a1814;
+    --muted: #5e5a54;
+    --correct-bg: #e8f5ee;
+    --correct: #2a7a48;
+    --wrong-bg: #fce8e6;
+    --wrong: #c0503a;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { width: 100%; height: 100%; background: var(--navy); font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif; color: var(--white); overflow: hidden; }
-  .screen { display: none; width: 100vw; height: 100vh; flex-direction: column; align-items: center; justify-content: center; padding: 2vw; }
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    overflow: hidden;
+  }
+  .screen {
+    display: none; width: 100vw; height: 100vh;
+    flex-direction: column; align-items: center; justify-content: center;
+    padding: 2vw;
+  }
   .screen.active { display: flex; }
 
-  /* COVER */
-  #cover { position: relative; overflow: hidden; }
-  .deco { position: absolute; border-radius: 50%; border: 2px solid rgba(245,166,35,0.3); }
-  .d1 { width: 55vw; height: 55vw; top: -20vw; right: -15vw; background: rgba(245,166,35,0.06); }
-  .d2 { width: 38vw; height: 38vw; top: -10vw; right: -5vw; background: rgba(245,166,35,0.04); }
+  /* ── COVER ── */
+  #cover { position: relative; overflow: hidden; background: var(--bg); }
   .cover-content { position: relative; z-index: 2; width: 100%; max-width: 1100px; }
-  .cover-quiz { font-size: clamp(4rem,9vw,8rem); font-weight: 800; color: var(--gold); letter-spacing: 0.15em; margin-bottom: 0.15em; }
-  .cover-title { font-size: clamp(1.4rem,3vw,2.4rem); font-weight: 400; color: var(--white); margin-bottom: 0.3em; }
-  .cover-author { font-size: clamp(0.9rem,1.5vw,1.2rem); color: var(--grey); font-style: italic; margin-bottom: 1.8em; }
-  .cover-sep { width: 80px; height: 4px; background: var(--gold); border-radius: 2px; margin-bottom: 1.8em; }
-  .cover-sub { font-size: clamp(0.9rem,1.6vw,1.2rem); color: var(--light); margin-bottom: 2.5em; }
-  .players-label { font-size: clamp(0.75rem,1.2vw,1rem); font-weight: 700; color: var(--gold); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.7em; }
-  .players-list { font-size: clamp(1rem,1.8vw,1.4rem); color: var(--light); margin-bottom: 1.5em; }
-  .share-box { display: flex; align-items: center; gap: 0.8em; background: var(--navy-mid); border: 1px solid rgba(245,166,35,0.3); border-radius: 12px; padding: 0.8em 1.2em; margin-bottom: 2.5em; max-width: 600px; }
-  .share-box span { font-size: clamp(0.75rem,1.2vw,0.95rem); color: var(--light); word-break: break-all; }
-  .share-box button { flex-shrink: 0; background: var(--gold); color: var(--navy); border: none; padding: 0.5em 1.2em; border-radius: 50px; font-weight: 700; cursor: pointer; font-size: 0.8rem; }
-  .btn-start { background: var(--gold); color: var(--navy); border: none; padding: 1em 3em; font-size: clamp(1rem,1.8vw,1.3rem); font-weight: 700; border-radius: 50px; cursor: pointer; letter-spacing: 0.05em; transition: transform .15s, box-shadow .15s; }
-  .btn-start:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(245,166,35,0.4); }
 
-  /* QUESTION */
+  .cover-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: clamp(0.65rem, 1vw, 0.85rem);
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 0.6em;
+  }
+  .cover-quiz {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    color: var(--text);
+    letter-spacing: -2px;
+    line-height: 1;
+    margin-bottom: 0.15em;
+  }
+  .cover-quiz em { color: var(--accent); font-style: italic; }
+  .cover-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.2rem, 2.5vw, 2rem);
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 0.3em;
+  }
+  .cover-sep { width: 60px; height: 3px; background: var(--accent); border-radius: 2px; margin: 1.2em 0; }
+  .cover-sub { font-size: clamp(0.85rem, 1.4vw, 1.1rem); color: var(--muted); margin-bottom: 2em; }
+
+  .players-label {
+    font-family: 'DM Mono', monospace;
+    font-size: clamp(0.65rem, 1vw, 0.8rem);
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.5em;
+  }
+  .players-list { font-size: clamp(0.9rem, 1.5vw, 1.2rem); color: var(--text); margin-bottom: 1.5em; }
+
+  .share-box {
+    display: flex; align-items: center; gap: 0.8em;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 0.7em 1em;
+    margin-bottom: 2em; max-width: 600px;
+  }
+  .share-box span {
+    font-family: 'DM Mono', monospace;
+    font-size: clamp(0.7rem, 1.1vw, 0.85rem);
+    color: var(--muted); word-break: break-all;
+  }
+  .share-box button {
+    flex-shrink: 0; background: var(--accent); color: #fff;
+    border: none; padding: 0.45em 1.1em; border-radius: 20px;
+    font-family: 'DM Sans', sans-serif; font-weight: 600;
+    cursor: pointer; font-size: 0.8rem;
+    transition: background 0.15s;
+  }
+  .share-box button:hover { background: #a07a18; }
+
+  .btn-start {
+    background: var(--accent); color: #fff; border: none;
+    padding: 0.9em 2.8em;
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1rem, 1.6vw, 1.3rem);
+    border-radius: 40px; cursor: pointer;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .btn-start:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(184,148,30,0.35); }
+
+  /* ── QUESTION ── */
   #question { justify-content: flex-start; padding: 2vh 3vw; }
+
   .q-topbar { width: 100%; display: flex; align-items: center; gap: 1.5vw; margin-bottom: 1.5vh; }
-  .q-num-badge { width: clamp(2.2rem,4vw,3.2rem); height: clamp(2.2rem,4vw,3.2rem); background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: clamp(0.9rem,1.8vw,1.4rem); font-weight: 800; color: var(--navy); flex-shrink: 0; }
+  .q-num-badge {
+    width: clamp(2rem, 3.5vw, 3rem); height: clamp(2rem, 3.5vw, 3rem);
+    background: var(--accent); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: clamp(0.85rem, 1.5vw, 1.2rem);
+    font-weight: 500; color: #fff; flex-shrink: 0;
+  }
   .q-progress-wrap { flex: 1; }
-  .q-meta { font-size: clamp(0.65rem,1vw,0.85rem); color: var(--grey); margin-bottom: 0.3em; }
-  .q-bar-bg { width: 100%; height: 6px; background: var(--navy-mid); border-radius: 3px; }
-  .q-bar-fill { height: 6px; background: var(--gold); border-radius: 3px; transition: width .4s; }
-  .q-text { width: 100%; font-size: clamp(1.1rem,2.2vw,1.8rem); font-weight: 700; color: var(--white); line-height: 1.4; margin-bottom: 1.5vh; }
-  .q-opts { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 1vh 1.5vw; margin-bottom: 1.8vh; }
-  .q-opt { background: var(--navy-mid); border: 1px solid rgba(200,208,232,0.2); border-radius: 12px; padding: 0.9em 1.1em; display: flex; align-items: center; gap: 0.9em; }
-  .q-opt-label { width: clamp(1.6rem,2.8vw,2.2rem); height: clamp(1.6rem,2.8vw,2.2rem); background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: clamp(0.75rem,1.3vw,1rem); font-weight: 800; color: var(--navy); flex-shrink: 0; }
-  .q-opt-text { font-size: clamp(0.8rem,1.4vw,1.1rem); color: var(--white); line-height: 1.35; }
-  .q-opt.correct { background: var(--correct-bg); border-color: var(--gold); }
-  .q-opt.correct .q-opt-text { color: var(--gold); font-weight: 600; }
-  .q-opt.wrong { background: var(--wrong-bg); border-color: rgba(248,113,113,0.4); opacity: 0.6; }
-  .q-opt.wrong .q-opt-text { color: var(--light); }
+  .q-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: clamp(0.6rem, 0.9vw, 0.75rem);
+    color: var(--muted); margin-bottom: 0.3em;
+    letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .q-bar-bg { width: 100%; height: 5px; background: var(--border); border-radius: 3px; }
+  .q-bar-fill { height: 5px; background: var(--accent); border-radius: 3px; transition: width .4s; }
+
+  .q-text {
+    width: 100%;
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1rem, 2vw, 1.7rem);
+    color: var(--text); line-height: 1.4; margin-bottom: 1.5vh;
+  }
+  .q-opts { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 1vh 1.5vw; margin-bottom: 1.5vh; }
+  .q-opt {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 0.8em 1em;
+    display: flex; align-items: center; gap: 0.8em;
+  }
+  .q-opt-label {
+    width: clamp(1.5rem, 2.5vw, 2rem); height: clamp(1.5rem, 2.5vw, 2rem);
+    background: var(--accent); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: clamp(0.7rem, 1.1vw, 0.9rem); font-weight: 500; color: #fff; flex-shrink: 0;
+  }
+  .q-opt-text { font-size: clamp(0.75rem, 1.3vw, 1rem); color: var(--text); line-height: 1.35; }
+  .q-opt.correct { background: var(--correct-bg); border-color: var(--correct); }
+  .q-opt.correct .q-opt-label { background: var(--correct); }
+  .q-opt.correct .q-opt-text { color: var(--correct); font-weight: 600; }
+  .q-opt.wrong { background: var(--surface2); border-color: var(--border); opacity: 0.6; }
 
   /* PLAYER GRID */
-  .player-section-label { width: 100%; font-size: clamp(0.65rem,1vw,0.85rem); font-weight: 700; color: var(--gold); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.6vh; }
-  .player-grid { width: 100%; display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.8vw; }
-  .player-card { background: var(--navy-mid); border: 1px solid rgba(200,208,232,0.15); border-radius: 10px; padding: 0.6em 0.4em 0.5em; text-align: center; }
-  .player-name { font-size: clamp(0.7rem,1.2vw,1rem); font-weight: 700; color: var(--gold); margin-bottom: 0.5em; }
-  .player-btns { display: flex; gap: 4px; justify-content: center; }
-  .ans-btn { width: clamp(1.6rem,2.6vw,2.1rem); height: clamp(1.6rem,2.6vw,2.1rem); border-radius: 6px; border: 1.5px solid rgba(200,208,232,0.25); background: transparent; color: var(--grey); font-size: clamp(0.6rem,1vw,0.85rem); font-weight: 700; transition: all .15s; display: flex; align-items: center; justify-content: center; }
-  .ans-btn.selected { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+  .player-section-label {
+    width: 100%;
+    font-family: 'DM Mono', monospace;
+    font-size: clamp(0.6rem, 0.9vw, 0.75rem);
+    font-weight: 500; color: var(--accent);
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.6vh;
+  }
+  .player-grid {
+    width: 100%; display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 0.6vw;
+  }
+  .player-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 0.5em 0.4em; text-align: center;
+  }
+  .player-name {
+    font-size: clamp(0.65rem, 1.1vw, 0.9rem);
+    font-weight: 600; color: var(--accent); margin-bottom: 0.4em;
+  }
+  .player-btns { display: flex; gap: 3px; justify-content: center; }
+  .ans-btn {
+    width: clamp(1.4rem, 2.2vw, 1.8rem); height: clamp(1.4rem, 2.2vw, 1.8rem);
+    border-radius: 5px; border: 1px solid var(--border);
+    background: transparent; color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: clamp(0.55rem, 0.9vw, 0.75rem); font-weight: 500;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .15s;
+  }
+  .ans-btn.selected { background: #fff8ec; color: var(--accent); border-color: var(--accent); }
   .ans-btn.sel-correct { background: var(--correct-bg); color: var(--correct); border-color: var(--correct); }
   .ans-btn.sel-wrong { background: var(--wrong-bg); color: var(--wrong); border-color: var(--wrong); }
 
-  .reveal-row { width: 100%; display: flex; align-items: center; justify-content: space-between; margin-top: 0.5vh; }
-  .reveal-status { font-size: clamp(0.7rem,1.1vw,0.9rem); color: var(--grey); }
-  .reveal-status b { color: var(--gold); }
-  .btn-reveal { background: var(--gold); color: var(--navy); border: none; padding: 0.7em 2.5em; font-size: clamp(0.85rem,1.4vw,1.1rem); font-weight: 700; border-radius: 50px; cursor: pointer; opacity: 0.3; pointer-events: none; transition: opacity .2s; }
+  .reveal-row {
+    width: 100%; display: flex; align-items: center;
+    justify-content: space-between; margin-top: 0.5vh;
+  }
+  .reveal-status { font-size: clamp(0.65rem, 1vw, 0.85rem); color: var(--muted); }
+  .reveal-status b { color: var(--accent); }
+
+  .btn-reveal {
+    background: var(--accent); color: #fff; border: none;
+    padding: 0.6em 2em;
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(0.8rem, 1.2vw, 1rem); font-weight: 600;
+    border-radius: 30px; cursor: pointer;
+    opacity: 0.3; pointer-events: none; transition: opacity .2s;
+  }
   .btn-reveal.ready { opacity: 1; pointer-events: all; }
-  .btn-reveal.ready:hover { box-shadow: 0 4px 20px rgba(245,166,35,0.4); }
+  .btn-reveal.ready:hover { box-shadow: 0 4px 16px rgba(184,148,30,0.35); }
 
-  .explanation { width: 100%; background: #1C2040; border: 1.5px solid var(--gold); border-radius: 12px; padding: 0.9em 1.2em; margin-top: 1vh; display: none; }
+  .explanation {
+    width: 100%; background: #fff8ec;
+    border: 1px solid var(--accent); border-radius: 10px;
+    padding: 0.8em 1.1em; margin-top: 0.8vh; display: none;
+  }
   .explanation.visible { display: block; }
-  .exp-label { font-size: clamp(0.65rem,1vw,0.85rem); font-weight: 700; color: var(--gold); margin-bottom: 0.3em; }
-  .exp-text { font-size: clamp(0.8rem,1.3vw,1rem); color: var(--light); line-height: 1.55; }
+  .exp-label {
+    font-family: 'DM Mono', monospace;
+    font-size: clamp(0.6rem, 0.9vw, 0.75rem);
+    font-weight: 500; color: var(--accent);
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.3em;
+  }
+  .exp-text { font-size: clamp(0.75rem, 1.2vw, 0.95rem); color: var(--muted); line-height: 1.55; }
 
-  .btn-next { display: none; align-self: flex-end; margin-top: 0.8vh; background: transparent; color: var(--gold); border: 1.5px solid var(--gold); padding: 0.6em 2em; font-size: clamp(0.8rem,1.3vw,1rem); font-weight: 700; border-radius: 50px; cursor: pointer; }
+  .btn-next {
+    display: none; align-self: flex-end; margin-top: 0.6vh;
+    background: transparent; color: var(--accent);
+    border: 1.5px solid var(--accent);
+    padding: 0.55em 1.8em;
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(0.75rem, 1.2vw, 0.95rem); font-weight: 600;
+    border-radius: 30px; cursor: pointer;
+    transition: background 0.15s;
+  }
   .btn-next.visible { display: block; }
-  .btn-next:hover { background: rgba(245,166,35,0.15); }
+  .btn-next:hover { background: #fff8ec; }
 
-  /* SCOREBOARD */
+  /* ── SCOREBOARD ── */
   #scoreboard { justify-content: flex-start; padding: 3vh 4vw; }
-  .sb-title { font-size: clamp(2.5rem,6vw,5rem); font-weight: 800; color: var(--gold); letter-spacing: 0.15em; }
-  .sb-subtitle { font-size: clamp(1.2rem,3vw,2.5rem); font-weight: 400; color: var(--white); letter-spacing: 0.12em; margin-bottom: 0.6em; }
-  .sb-sep { width: 80px; height: 4px; background: var(--gold); border-radius: 2px; margin-bottom: 2vh; }
-  .sb-table { width: 100%; }
-  .sb-header { display: grid; grid-template-columns: 2.5rem 1fr 6rem 1fr; gap: 0 1.5vw; padding: 0.5em 1em; background: var(--navy-mid); border-radius: 8px; margin-bottom: 4px; }
-  .sb-header span { font-size: clamp(0.65rem,1vw,0.85rem); font-weight: 700; color: var(--gold); letter-spacing: 0.08em; text-transform: uppercase; }
-  .sb-row { display: grid; grid-template-columns: 2.5rem 1fr 6rem 1fr; gap: 0 1.5vw; padding: 0.8em 1em; border-radius: 8px; margin-bottom: 4px; align-items: center; }
-  .sb-row:nth-child(even) { background: rgba(45,50,104,0.5); }
-  .sb-row.winner { background: rgba(245,166,35,0.1); border: 1px solid rgba(245,166,35,0.3); }
-  .sb-medal { font-size: clamp(1.2rem,2.2vw,1.8rem); text-align: center; }
-  .sb-name { font-size: clamp(0.9rem,1.6vw,1.3rem); font-weight: 700; color: var(--white); }
-  .sb-score { font-size: clamp(1rem,1.8vw,1.5rem); font-weight: 800; color: var(--gold); text-align: center; }
-  .sb-profile { font-size: clamp(0.7rem,1.1vw,0.9rem); color: var(--light); font-style: italic; }
-  .sb-footer { font-size: clamp(0.6rem,0.9vw,0.75rem); color: var(--grey); text-align: center; margin-top: 1.5vh; }
-  .btn-restart { background: var(--gold); color: var(--navy); border: none; padding: 0.7em 2.5em; font-size: clamp(0.85rem,1.4vw,1.1rem); font-weight: 700; border-radius: 50px; cursor: pointer; margin-top: 2vh; }
-  .btn-restart:hover { box-shadow: 0 4px 20px rgba(245,166,35,0.4); }
+  .sb-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: clamp(0.65rem, 1vw, 0.85rem);
+    color: var(--accent); letter-spacing: 0.12em;
+    text-transform: uppercase; margin-bottom: 0.3em;
+  }
+  .sb-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+    color: var(--text); letter-spacing: -2px; line-height: 1;
+  }
+  .sb-title em { color: var(--accent); font-style: italic; }
+  .sb-sep { width: 60px; height: 3px; background: var(--accent); border-radius: 2px; margin: 1em 0 1.5vh; }
 
-  .logo-fixed { position: fixed; bottom: 1.5vh; left: 2vw; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.25em; color: var(--grey); z-index: 100; }
-  .conn-badge { position: fixed; top: 1.5vh; right: 2vw; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; color: var(--grey); z-index: 100; display: flex; align-items: center; gap: 0.4em; }
-  .conn-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--grey); }
+  .sb-table { width: 100%; }
+  .sb-header {
+    display: grid; grid-template-columns: 2.5rem 1fr 6rem 1fr;
+    gap: 0 1.5vw; padding: 0.5em 1em;
+    background: var(--surface2); border-radius: 8px; margin-bottom: 4px;
+  }
+  .sb-header span {
+    font-family: 'DM Mono', monospace;
+    font-size: clamp(0.6rem, 0.9vw, 0.75rem);
+    font-weight: 500; color: var(--muted);
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .sb-row {
+    display: grid; grid-template-columns: 2.5rem 1fr 6rem 1fr;
+    gap: 0 1.5vw; padding: 0.75em 1em;
+    border-radius: 8px; margin-bottom: 4px; align-items: center;
+  }
+  .sb-row:nth-child(even) { background: var(--surface); }
+  .sb-row.winner { background: #fff8ec; border: 1px solid rgba(184,148,30,0.4); }
+  .sb-medal { font-size: clamp(1.1rem, 2vw, 1.6rem); text-align: center; }
+  .sb-name { font-size: clamp(0.85rem, 1.5vw, 1.2rem); font-weight: 600; color: var(--text); }
+  .sb-score { font-family: 'DM Serif Display', serif; font-size: clamp(1rem, 1.7vw, 1.4rem); color: var(--accent); text-align: center; }
+  .sb-profile { font-size: clamp(0.65rem, 1vw, 0.85rem); color: var(--muted); font-style: italic; }
+  .sb-footer { font-size: clamp(0.55rem, 0.85vw, 0.7rem); color: var(--muted); text-align: center; margin-top: 1.5vh; }
+
+  .btn-restart {
+    background: var(--accent); color: #fff; border: none;
+    padding: 0.7em 2.5em;
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(0.85rem, 1.3vw, 1rem); font-weight: 600;
+    border-radius: 30px; cursor: pointer; margin-top: 2vh;
+    transition: box-shadow 0.15s;
+  }
+  .btn-restart:hover { box-shadow: 0 4px 16px rgba(184,148,30,0.35); }
+
+  /* ── FIXED UI ── */
+  .logo-fixed {
+    position: fixed; bottom: 1.5vh; left: 2vw;
+    font-family: 'DM Serif Display', serif;
+    font-size: 0.9rem; color: var(--muted); z-index: 100;
+  }
+  .logo-fixed em { color: var(--accent); font-style: italic; }
+  .conn-badge {
+    position: fixed; top: 1.5vh; right: 2vw;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem; font-weight: 500;
+    letter-spacing: 0.1em; color: var(--muted);
+    z-index: 100; display: flex; align-items: center; gap: 0.4em;
+  }
+  .conn-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); }
   .conn-badge.ok .conn-dot { background: var(--correct); }
   .conn-badge.err .conn-dot { background: var(--wrong); }
 </style>
 </head>
 <body>
 
-<div class="logo-fixed">COSAPORTO</div>
+<div class="logo-fixed">Cosa<em>Retreat</em></div>
 <div class="conn-badge" id="connBadge"><span class="conn-dot"></span><span id="connText">Connessione...</span></div>
 
+<!-- COVER -->
 <div id="cover" class="screen active">
-  <div class="deco d1"></div>
-  <div class="deco d2"></div>
   <div class="cover-content">
-    <div class="cover-quiz">QUIZ</div>
-    <div class="cover-title">La Macchina degli Appuntamenti</div>
-    <div class="cover-author">Arnold Koci</div>
+    <div class="cover-eyebrow">CosaRetreat · Sales Workshop</div>
+    <div class="cover-quiz">Quiz<br><em>Sales Challenge</em></div>
+    <div class="cover-title">La Macchina degli Appuntamenti — Arnold Koci</div>
     <div class="cover-sep"></div>
-    <div class="cover-sub">10 domande &middot; Team Commerciale &middot; Chi ne sa di piu?</div>
+    <div class="cover-sub">10 domande · Chi ne sa di più?</div>
     <div class="players-label">Partecipanti</div>
-    <div class="players-list">Marco &nbsp;&middot;&nbsp; Francesca &nbsp;&middot;&nbsp; Tommaso &nbsp;&middot;&nbsp; Margherita &nbsp;&middot;&nbsp; Federica &nbsp;&middot;&nbsp; Stefano</div>
+    <div class="players-list" id="playersList"></div>
     <div class="share-box">
       <span id="shareLink">Link per i partecipanti: caricamento...</span>
       <button id="btnCopyLink">Copia link</button>
     </div>
-    <button class="btn-start" id="btnStart">Inizia il Quiz &rarr;</button>
+    <button class="btn-start" id="btnStart">Inizia il Quiz →</button>
   </div>
 </div>
 
+<!-- QUESTION -->
 <div id="question" class="screen">
   <div class="q-topbar">
     <div class="q-num-badge" id="qNumBadge">1</div>
@@ -156,23 +347,24 @@
     <button class="btn-reveal" id="btnReveal">Rivela risposta</button>
   </div>
   <div class="explanation" id="explanation">
-    <div class="exp-label">Perche?</div>
+    <div class="exp-label">Perché?</div>
     <div class="exp-text" id="expText"></div>
   </div>
-  <button class="btn-next" id="btnNext">Prossima domanda &rarr;</button>
+  <button class="btn-next" id="btnNext">Prossima domanda →</button>
 </div>
 
+<!-- SCOREBOARD -->
 <div id="scoreboard" class="screen">
-  <div class="sb-title">CLASSIFICA</div>
-  <div class="sb-subtitle">FINALE</div>
+  <div class="sb-eyebrow">Classifica</div>
+  <div class="sb-title"><em>Finale</em></div>
   <div class="sb-sep"></div>
   <div class="sb-table">
     <div class="sb-header">
-      <span>#</span><span>Nome</span><span style="text-align:center">Punteggio</span><span>Profilo</span>
+      <span>#</span><span>Nome</span><span style="text-align:center">Punti</span><span>Profilo</span>
     </div>
     <div id="sbRows"></div>
   </div>
-  <div class="sb-footer">Profili: 9-10 Closer Sistematico &middot; 7-8 Cacciatore con Metodo &middot; 5-6 Venditore in Transizione &middot; 0-4 Talento Grezzo</div>
+  <div class="sb-footer">9-10 Closer Sistematico · 7-8 Cacciatore con Metodo · 5-6 Venditore in Transizione · 0-4 Talento Grezzo</div>
   <button class="btn-restart" id="btnRestart">Ricomincia</button>
 </div>
 
@@ -191,18 +383,17 @@ var scoresRef = root.child("scores");
 var currentState = {started:false, currentQ:0, revealed:false, finished:false};
 var currentAnswers = {};
 
+// Connessione
 var connBadge = document.getElementById("connBadge");
-var connText = document.getElementById("connText");
 db.ref(".info/connected").on("value", function(snap){
-  if (snap.val() === true) {
-    connBadge.className = "conn-badge ok";
-    connText.textContent = "Connesso";
-  } else {
-    connBadge.className = "conn-badge err";
-    connText.textContent = "Disconnesso";
-  }
+  connBadge.className = "conn-badge " + (snap.val() ? "ok" : "err");
+  document.getElementById("connText").textContent = snap.val() ? "Connesso" : "Disconnesso";
 });
 
+// Player list in cover
+document.getElementById("playersList").textContent = PLAYERS.join("  ·  ");
+
+// Share link
 var playerUrl = new URL("player.html", window.location.href).toString();
 document.getElementById("shareLink").textContent = playerUrl;
 document.getElementById("btnCopyLink").addEventListener("click", function(){
@@ -236,7 +427,7 @@ function renderQuestionShell(qIdx) {
 
   var optsEl = document.getElementById("qOpts");
   optsEl.innerHTML = "";
-  q.opts.forEach(function(opt, i) {
+  q.opts.forEach(function(opt, i){
     var div = document.createElement("div");
     div.className = "q-opt";
     div.id = "opt" + i;
@@ -246,7 +437,7 @@ function renderQuestionShell(qIdx) {
 
   var grid = document.getElementById("playerGrid");
   grid.innerHTML = "";
-  PLAYERS.forEach(function(player) {
+  PLAYERS.forEach(function(player){
     var card = document.createElement("div");
     card.className = "player-card";
     card.id = "card-" + player;
@@ -262,7 +453,8 @@ function renderQuestionShell(qIdx) {
   document.getElementById("btnReveal").classList.remove("ready");
   document.getElementById("revealStatus").innerHTML = "Nessuno ha risposto ancora";
   PLAYERS.forEach(function(player){
-    document.getElementById("pname-" + player).style.color = "var(--gold)";
+    var pname = document.getElementById("pname-" + player);
+    if (pname) pname.style.color = "var(--accent)";
   });
 }
 
@@ -298,11 +490,12 @@ function renderAnswers(qIdx, answers, revealed) {
       statusEl.innerHTML = "Nessuno ha risposto ancora";
     } else if (answered < total) {
       var missing = PLAYERS.filter(function(p){ return currentAnswers[p] === undefined; }).join(", ");
-      statusEl.innerHTML = "<b>" + answered + "/" + total + "</b> hanno risposto &mdash; Mancano: " + missing;
+      statusEl.innerHTML = "<b>" + answered + "/" + total + "</b> hanno risposto — Mancano: " + missing;
     } else {
       statusEl.innerHTML = "<b>Tutti hanno risposto!</b> Pronti per la risposta.";
     }
-    btnReveal.classList.toggle("ready", answered === total);
+    // L'host può rivelare anche se non tutti hanno risposto (pulsante sempre attivo se almeno 1 risposta)
+    btnReveal.classList.toggle("ready", answered > 0);
   }
 }
 
@@ -317,9 +510,12 @@ function applyReveal(qIdx) {
   });
   PLAYERS.forEach(function(player){
     var chosen = currentAnswers[player];
-    var isCorrect = (chosen === q.ans);
+    var pname = document.getElementById("pname-" + player);
+    if (!pname) return;
     if (chosen !== undefined) {
-      document.getElementById("pname-" + player).style.color = isCorrect ? "var(--correct)" : "var(--wrong)";
+      pname.style.color = (chosen === q.ans) ? "var(--correct)" : "var(--wrong)";
+    } else {
+      pname.style.color = "var(--muted)";
     }
   });
   document.getElementById("expText").textContent = q.exp;
@@ -332,8 +528,6 @@ function applyReveal(qIdx) {
 function revealAnswer() {
   var qIdx = currentState.currentQ;
   var q = QUESTIONS[qIdx];
-  var answered = Object.keys(currentAnswers).length;
-  if (answered < PLAYERS.length) return;
 
   scoresRef.once("value").then(function(snap){
     var scores = snap.val() || {};
@@ -367,7 +561,7 @@ function showScoreboard() {
     var maxScore = sorted.length ? sorted[0].score : 0;
     var sbRows = document.getElementById("sbRows");
     sbRows.innerHTML = "";
-    var medals = ["🥇","🥈","🥉","","",""];
+    var medals = ["🥇","🥈","🥉","","","","","","","",""];
     sorted.forEach(function(entry, i){
       var profile = PROFILES[PROFILES.length-1];
       for (var j=0; j<PROFILES.length; j++){
@@ -376,7 +570,8 @@ function showScoreboard() {
       var isWinner = (entry.score === maxScore);
       var row = document.createElement("div");
       row.className = "sb-row" + (isWinner ? " winner" : "");
-      row.innerHTML = "<div class='sb-medal'>" + (medals[i]||"") + "</div>" +
+      row.innerHTML =
+        "<div class='sb-medal'>" + (medals[i]||"") + "</div>" +
         "<div class='sb-name'>" + entry.name + "</div>" +
         "<div class='sb-score'>" + entry.score + " / " + QUESTIONS.length + "</div>" +
         "<div class='sb-profile'>" + profile.label + "</div>";
@@ -398,15 +593,9 @@ stateRef.on("value", function(snap){
   var s = snap.val() || {started:false, currentQ:0, revealed:false, finished:false};
   currentState = s;
 
-  if (s.finished) {
-    showScoreboard();
-    return;
-  }
-  if (!s.started) {
-    show("cover");
-    lastRenderedQ = -1;
-    return;
-  }
+  if (s.finished) { showScoreboard(); return; }
+  if (!s.started) { show("cover"); lastRenderedQ = -1; return; }
+
   show("question");
   if (s.currentQ !== lastRenderedQ) {
     renderQuestionShell(s.currentQ);
