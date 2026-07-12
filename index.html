@@ -575,6 +575,7 @@
   <button class="nav-btn" onclick="showSection('obiezioni', this)">Gestione Obiezioni</button>
   <button class="nav-btn" onclick="showSection('feedback', this)">Scheda Feedback</button>
   <button class="nav-btn" onclick="showSection('timer', this)">⏱ Timer</button>
+  <button class="nav-btn" onclick="showSection('quiz', this)">🎮 Quiz</button>
 </nav>
 
 <!-- ══════════ AGENDA ══════════ -->
@@ -877,6 +878,57 @@
   </div>
 </section>
 
+<!-- ══════════ QUIZ ══════════ -->
+<section class="section" id="quiz">
+  <h1>La Macchina<br><em>degli Appuntamenti</em></h1>
+  <p class="subtitle">Quiz multiplayer in tempo reale — il conduttore controlla il gioco, i partecipanti rispondono dal proprio telefono.</p>
+  <hr class="divider">
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px">
+
+    <div class="card" style="text-align:center">
+      <h3 style="margin-bottom:12px">🖥️ Conduttore</h3>
+      <p style="color:var(--muted);font-size:13px;margin-bottom:16px">Apri questa pagina sullo schermo grande. Controlla le domande, rivela le risposte e vedi la classifica.</p>
+      <a href="host.html" target="_blank" class="btn primary" style="display:inline-block;text-decoration:none;padding:10px 20px">Apri Host →</a>
+    </div>
+
+    <div class="card" style="text-align:center">
+      <h3 style="margin-bottom:12px">📱 Partecipanti</h3>
+      <p style="color:var(--muted);font-size:13px;margin-bottom:16px">Ogni partecipante scansiona il QR code o apre il link dal proprio telefono per rispondere in tempo reale.</p>
+      <a href="player.html" target="_blank" class="btn" style="display:inline-block;text-decoration:none;padding:10px 20px">Apri Player →</a>
+    </div>
+
+  </div>
+
+  <div class="card" style="text-align:center">
+    <h3 style="margin-bottom:16px">QR Code — Player</h3>
+    <div id="qr-container" style="display:flex;justify-content:center;margin-bottom:16px">
+      <canvas id="qr-canvas" width="180" height="180" style="border-radius:8px;border:4px solid var(--border)"></canvas>
+    </div>
+    <p style="color:var(--muted);font-size:13px">Il QR punta a <code style="font-family:'DM Mono',monospace;color:var(--accent)">player.html</code> nella stessa cartella del sito.<br>Funziona non appena pubblichi tutti i file su GitHub Pages.</p>
+  </div>
+
+  <hr class="divider">
+
+  <h3 style="margin-bottom:16px">Giocatori configurati</h3>
+  <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px" id="quiz-players"></div>
+
+  <h3 style="margin-bottom:16px">Domande del quiz</h3>
+  <div id="quiz-questions-list"></div>
+
+  <hr class="divider">
+  <div class="card" style="background:var(--surface2)">
+    <h3 style="margin-bottom:10px">⚙️ Setup Firebase</h3>
+    <p style="color:var(--muted);font-size:13px;line-height:1.7">
+      Il quiz usa Firebase Realtime Database per il multiplayer. Per attivarlo:<br>
+      1. Vai su <a href="https://console.firebase.google.com" target="_blank" class="header-link" style="text-decoration:underline">console.firebase.google.com</a> e crea un progetto<br>
+      2. Abilita <strong>Realtime Database</strong> (regole in modalità test)<br>
+      3. Copia la config nel file <code style="font-family:'DM Mono',monospace">firebase-config.js</code><br>
+      4. Carica tutti e 5 i file su GitHub: <code style="font-family:'DM Mono',monospace">index.html, host.html, player.html, quiz-data.js, firebase-config.js</code>
+    </p>
+  </div>
+</section>
+
 <script>
 // ── NAV ──
 function showSection(id, btn) {
@@ -1080,7 +1132,7 @@ const scenari = [
     tag: "Upsell / Retention",
     tagClass: "accent",
     titolo: "Il cliente attivo che non cresce",
-    contesto: "Cliente Cosaporto da 8 mesi. Ordina catering mensile a Bologna, 20 persone. Non ha mai provato il servizio gifting né eventi.",
+    contesto: "Cliente Cosaporto da 8 mesi. Ordina catering mensile a Roma, 20 persone. Non ha mai provato il servizio gifting né eventi.",
     ruolo_venditore: "Account Manager. Stai facendo una call di check-in periodica.",
     ruolo_cliente: "Operations Manager. Contenta del servizio attuale. Non pensa di avere altri bisogni — ma non ha esplorato.",
     obiettivo: "Fare upsell su gifting per fine anno (mancano 4 mesi). Non fare una proposta commerciale aggressiva — fai emergere il bisogno.",
@@ -1301,10 +1353,74 @@ function resetTimer() {
   document.getElementById('timer-label').textContent = 'Pronto';
 }
 
+// ── QUIZ SECTION ──
+const QUIZ_PLAYERS = ["Marco","Francesca","Tommaso","Margherita","Federica","Stefano"];
+const QUIZ_QUESTIONS = [
+  {q:"Qual è il pilastro fondamentale di un sistema di acquisizione clienti efficace?", ans:"Un sistema prevedibile e replicabile"},
+  {q:"Quanti venditori B2B si arrendono dopo il primo mancato riscontro dal prospect?", ans:"Il 44%"},
+  {q:"In una cold email efficace, a quale domanda deve rispondere ogni frase del corpo?", ans:"Cosa ci guadagna chi legge?"},
+  {q:"Come si costruisce un database di prospect secondo il metodo?", ans:"Filtrando su segnali concreti: tecnologie, crescita, assunzioni"},
+  {q:"Qual è l'errore più comune nella CTA di una prima email a freddo?", ans:"Chiedere troppo subito (es. call di 45 minuti)"},
+  {q:"Qual è il mindset vincente nel follow-up?", ans:"Offro valore reale e il timing cambierà"},
+  {q:"Cos'è lo show-up rate?", ans:"La percentuale di appuntamenti fissati che avvengono davvero"},
+  {q:"Cosa descrive la filosofia del follow-up multicanale?", ans:"Integrare LinkedIn o una call moltiplica le possibilità senza saturare"},
+  {q:"Quanto conta la qualità del database rispetto al testo dell'email?", ans:"L'80% del tempo va ai dati: la lista è la regola più importante"},
+  {q:"Come si definisce la persistenza professionale nel metodo?", ans:"Cambiare angolo ad ogni touchpoint aggiungendo valore reale"}
+];
+
+function renderQuizSection() {
+  // Giocatori
+  const playersEl = document.getElementById('quiz-players');
+  if (playersEl) {
+    playersEl.innerHTML = QUIZ_PLAYERS.map(p =>
+      `<span class="tag accent" style="font-size:13px;padding:6px 14px">${p}</span>`
+    ).join('');
+  }
+
+  // Domande
+  const questionsEl = document.getElementById('quiz-questions-list');
+  if (questionsEl) {
+    questionsEl.innerHTML = QUIZ_QUESTIONS.map((q, i) => `
+      <div class="agenda-row">
+        <div class="agenda-time" style="min-width:32px;font-size:13px">${i+1}</div>
+        <div class="agenda-content">
+          <div class="agenda-title" style="font-size:13px">${q.q}</div>
+          <div class="agenda-desc">✓ ${q.ans}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // QR Code (semplice, disegnato su canvas)
+  const canvas = document.getElementById('qr-canvas');
+  if (!canvas) return;
+  const playerUrl = window.location.href.replace('index.html','').replace(/\/$/, '') + '/player.html';
+  generateSimpleQR(canvas, playerUrl);
+}
+
+function generateSimpleQR(canvas, text) {
+  // Usa l'API pubblica di QR server
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = function() { ctx.drawImage(img, 0, 0, 180, 180); };
+  img.onerror = function() {
+    ctx.fillStyle = '#f0ede6';
+    ctx.fillRect(0,0,180,180);
+    ctx.fillStyle = '#5e5a54';
+    ctx.font = '12px DM Sans, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Pubblica su GitHub', 90, 85);
+    ctx.fillText('per vedere il QR', 90, 103);
+  };
+  img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(text);
+}
+
 // ── INIT ──
 renderObiezioni();
 renderScenario();
 renderScoreGrid();
+renderQuizSection();
 
 const circle = document.getElementById('timer-circle');
 circle.style.strokeDasharray = circumference;
