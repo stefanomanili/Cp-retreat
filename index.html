@@ -1513,21 +1513,36 @@ function renderQuizSection() {
 }
 
 function generateSimpleQR(canvas, text) {
-  // Usa l'API pubblica di QR server
-  const ctx = canvas.getContext('2d');
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.onload = function() { ctx.drawImage(img, 0, 0, 180, 180); };
-  img.onerror = function() {
+  // Usa qrcode.js inline via CDN
+  const script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+  script.onload = function() {
+    const parent = canvas.parentNode;
+    canvas.style.display = 'none';
+    const div = document.createElement('div');
+    div.style.cssText = 'display:inline-block;border-radius:8px;overflow:hidden;border:4px solid var(--border)';
+    parent.insertBefore(div, canvas);
+    new QRCode(div, {
+      text: text,
+      width: 180, height: 180,
+      colorDark: '#1a1814',
+      colorLight: '#f7f5f0',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  };
+  script.onerror = function() {
+    // Fallback: mostra l'URL come testo
+    const ctx = canvas.getContext('2d');
+    canvas.style.display = 'block';
     ctx.fillStyle = '#f0ede6';
     ctx.fillRect(0,0,180,180);
-    ctx.fillStyle = '#5e5a54';
-    ctx.font = '12px DM Sans, sans-serif';
+    ctx.fillStyle = '#b8941e';
+    ctx.font = 'bold 11px Montserrat, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('Pubblica su GitHub', 90, 85);
-    ctx.fillText('per vedere il QR', 90, 103);
+    ctx.fillText('Scannerizza da GitHub', 90, 85);
+    ctx.fillText('Pages per il QR', 90, 103);
   };
-  img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(text);
+  document.head.appendChild(script);
 }
 
 // ── SKY METRICS GRID ──
