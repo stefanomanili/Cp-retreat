@@ -1,17 +1,12 @@
-// Incolla qui la configurazione del TUO progetto Firebase.
-// La trovi in: Console Firebase > Impostazioni progetto > Le tue app > SDK setup and configuration
-// Sostituisci TUTTI i valori "INSERISCI_..." qui sotto.
-
 var firebaseConfig = {
-  apiKey: "INSERISCI_API_KEY",
-  authDomain: "INSERISCI_PROGETTO.firebaseapp.com",
-  databaseURL: "https://INSERISCI_PROGETTO-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "INSERISCI_PROGETTO",
-  storageBucket: "INSERISCI_PROGETTO.appspot.com",
-  messagingSenderId: "INSERISCI_SENDER_ID",
-  appId: "INSERISCI_APP_ID"
+  apiKey: "AIzaSyA00AztCxMoa5LBGCMT03Xx9pL-tmAHFMg",
+  authDomain: "retreat-cosaporto.firebaseapp.com",
+  databaseURL: "https://retreat-cosaporto-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "retreat-cosaporto",
+  storageBucket: "retreat-cosaporto.firebasestorage.app",
+  messagingSenderId: "407414156583",
+  appId: "1:407414156583:web:195155fde1625b27100d02",
+  measurementId: "G-VPVBBE0BDF"
 };
 
-// Percorso radice nel Realtime Database dove viene salvato lo stato del quiz.
-// Puoi lasciarlo cosi, oppure cambiarlo se vuoi ospitare piu quiz nello stesso progetto Firebase.
 var QUIZ_ROOT = "cosaportoQuiz";
