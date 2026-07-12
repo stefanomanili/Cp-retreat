@@ -571,6 +571,7 @@
 <nav id="nav">
   <button class="nav-btn active" onclick="showSection('agenda', this)">Agenda</button>
   <button class="nav-btn" onclick="showSection('sky', this)">🚀 Sky is the limit</button>
+  <button class="nav-btn" onclick="showSection('aideas', this)">🤖 AIdeas</button>
   <button class="nav-btn" onclick="showSection('quiz', this)">🎮 Sales Machine</button>
   <button class="nav-btn" onclick="showSection('playbook', this)">Playbook</button>
   <button class="nav-btn" onclick="showSection('obiezioni', this)">Gestione Obiezioni</button>
@@ -1000,6 +1001,47 @@
   <div style="display:flex;gap:10px;margin-top:14px">
     <button class="btn" onclick="clearSharedTable()">Reset tabella</button>
     <button class="btn primary" onclick="window.print()">🖨️ Stampa</button>
+  </div>
+</section>
+
+<!-- ══════════ AIDEAS ══════════ -->
+<section class="section" id="aideas">
+  <h1>AI<em>deas</em></h1>
+  <p class="subtitle">5 idee AI-based che ci faranno volare. Vota ogni progetto su 4 dimensioni.</p>
+  <hr class="divider">
+
+  <div id="aideas-cards" style="display:flex;flex-direction:column;gap:16px;margin-bottom:32px"></div>
+
+  <hr class="divider">
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px">
+    <div class="card" style="text-align:center">
+      <h3 style="margin-bottom:12px">🖥️ Conduttore</h3>
+      <p style="color:var(--muted);font-size:13px;margin-bottom:16px">Visualizza in tempo reale i voti aggregati per ogni progetto.</p>
+      <a href="aideas-host.html" target="_blank" class="btn primary" style="display:inline-block;text-decoration:none;padding:10px 20px">Apri Host →</a>
+    </div>
+    <div class="card" style="text-align:center">
+      <h3 style="margin-bottom:12px">📱 Partecipanti</h3>
+      <p style="color:var(--muted);font-size:13px;margin-bottom:16px">Ogni partecipante vota i 4 progetti su 4 dimensioni dal proprio telefono.</p>
+      <a href="aideas-player.html" target="_blank" class="btn" style="display:inline-block;text-decoration:none;padding:10px 20px">Apri Player →</a>
+    </div>
+  </div>
+
+  <div class="card" style="text-align:center">
+    <h3 style="margin-bottom:16px">QR Code — Player</h3>
+    <div style="display:flex;justify-content:center;margin-bottom:16px">
+      <canvas id="qr-aideas-canvas" width="180" height="180" style="border-radius:8px;border:4px solid var(--border)"></canvas>
+    </div>
+    <p style="color:var(--muted);font-size:13px">Punta a <code style="font-family:'DM Mono',monospace;color:var(--accent)">aideas-player.html</code></p>
+  </div>
+
+  <hr class="divider">
+  <h3 style="margin-bottom:12px">Dimensioni di voto</h3>
+  <div style="display:flex;flex-wrap:wrap;gap:8px">
+    <span style="font-size:13px;background:var(--surface2);border:1px solid var(--border);padding:5px 12px;border-radius:20px;color:var(--muted)">Fattibilità</span>
+    <span style="font-size:13px;background:var(--surface2);border:1px solid var(--border);padding:5px 12px;border-radius:20px;color:var(--muted)">Impatto sui Ricavi</span>
+    <span style="font-size:13px;background:var(--surface2);border:1px solid var(--border);padding:5px 12px;border-radius:20px;color:var(--muted)">Impatto su Efficienza/Costi</span>
+    <span style="font-size:13px;background:var(--surface2);border:1px solid var(--border);padding:5px 12px;border-radius:20px;color:var(--muted)">Generazione di Asset Unico</span>
   </div>
 </section>
 
@@ -1613,6 +1655,37 @@ function clearSharedTable() {
   buildSharedTable();
 }
 
+// ── AIDEAS ──
+const AIDEAS_PROJECTS = [
+  { id:"01", titolo:"Delivery Planner",      autore:"Carola",     emoji:"📦", desc:"Pianificazione intelligente delle consegne basata su AI." },
+  { id:"02", titolo:"Good Morning KAM",      autore:"Margherita", emoji:"🌅", desc:"Briefing quotidiano automatico per i Key Account Manager." },
+  { id:"03", titolo:"Find the Best Offer",   autore:"Federica",   emoji:"🎯", desc:"Motore AI per identificare l'offerta ottimale per ogni cliente." },
+  { id:"04", titolo:"NBA",                   autore:"Franci",     emoji:"🏀", desc:"Next Best Action: suggerisce la prossima mossa commerciale." }
+];
+
+function buildAideasCards() {
+  const container = document.getElementById('aideas-cards');
+  if (!container) return;
+  container.innerHTML = AIDEAS_PROJECTS.map(p => `
+    <div class="card" style="display:flex;align-items:flex-start;gap:16px">
+      <div style="font-size:2.5rem;flex-shrink:0;line-height:1">${p.emoji}</div>
+      <div style="flex:1">
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px">Progetto ${p.id}</div>
+        <div style="font-family:'DM Serif Display',serif;font-size:1.2rem;color:var(--text);margin-bottom:4px">${p.titolo}</div>
+        <div style="font-size:12px;color:var(--accent);font-weight:600;margin-bottom:6px">by ${p.autore}</div>
+        <div style="font-size:13px;color:var(--muted)">${p.desc}</div>
+      </div>
+    </div>
+  `).join('');
+
+  // QR
+  const canvas = document.getElementById('qr-aideas-canvas');
+  if (canvas) {
+    const url = window.location.href.replace('index.html','').replace(/\/$/, '') + '/aideas-player.html';
+    generateSimpleQR(canvas, url);
+  }
+}
+
 // ── INIT ──
 renderObiezioni();
 renderScenario();
@@ -1621,6 +1694,7 @@ renderQuizSection();
 buildSkyMetrics();
 buildFeedbackSection();
 buildSharedTable();
+buildAideasCards();
 
 // QR Feedback
 const feedbackCanvas = document.getElementById('qr-feedback-canvas');

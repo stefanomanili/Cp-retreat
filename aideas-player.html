@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>AIdeas · Vota · CosaRetreat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Montserrat:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f5f0; --surface: #ffffff; --surface2: #eeebe4;
+    --border: #dedad2; --accent: #b8941e; --text: #1a1814;
+    --muted: #5e5a54; --success: #2a7a48; --success-bg: #e8f5ee;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); font-family: 'Montserrat', sans-serif; color: var(--text); min-height: 100vh; }
+  body { padding: 6vw 6vw 8vw; display: flex; flex-direction: column; }
+
+  .logo { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--text); text-align: center; margin-bottom: 4vh; }
+  .logo em { color: var(--accent); font-style: italic; }
+  .logo a { text-decoration: none; color: inherit; }
+
+  .screen { display: none; flex-direction: column; flex: 1; }
+  .screen.active { display: flex; }
+
+  .title { font-family: 'DM Serif Display', serif; font-size: 2rem; letter-spacing: -0.5px; text-align: center; margin-bottom: 0.2em; }
+  .title em { color: var(--accent); font-style: italic; }
+  .subtitle { font-size: 0.85rem; color: var(--muted); text-align: center; margin-bottom: 3vh; line-height: 1.5; }
+
+  .name-list { display: flex; flex-direction: column; gap: 0.6em; }
+  .name-btn {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 0.9em 1em; font-family: 'Montserrat', sans-serif; font-size: 0.95rem;
+    font-weight: 500; color: var(--text); cursor: pointer; text-align: left;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .name-btn:hover { border-color: var(--accent); background: #fff8ec; }
+
+  .center-msg { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 1em; }
+  .center-msg .big { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--accent); }
+  .center-msg .small { font-size: 0.85rem; color: var(--muted); }
+  .spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.9s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* PROGETTI */
+  .projects-wrap { display: flex; flex-direction: column; gap: 20px; }
+
+  .project-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px;
+  }
+  .project-card.submitted { border-color: var(--success); background: var(--success-bg); }
+
+  .project-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .project-emoji { font-size: 1.8rem; line-height: 1; }
+  .project-info { flex: 1; }
+  .project-num { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; }
+  .project-title { font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--text); }
+  .project-author { font-size: 0.75rem; color: var(--muted); margin-top: 1px; }
+  .submitted-badge { font-size: 0.7rem; color: var(--success); font-weight: 600; font-family: 'DM Mono', monospace; }
+
+  .dim-row { margin-bottom: 10px; }
+  .dim-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin-bottom: 5px; }
+  .stars-row { display: flex; gap: 4px; }
+  .star-btn { font-size: 1.6rem; cursor: pointer; color: #d0ccc4; transition: color 0.1s; user-select: none; background: none; border: none; padding: 0; }
+  .star-btn.lit { color: var(--accent); }
+  .star-btn:active { transform: scale(1.2); }
+
+  .project-submit {
+    width: 100%; padding: 0.7em; border-radius: 8px; border: none; margin-top: 10px;
+    font-family: 'Montserrat', sans-serif; font-size: 0.85rem; font-weight: 600;
+    background: var(--accent); color: #fff; cursor: pointer;
+    opacity: 0.35; pointer-events: none; transition: background 0.15s;
+  }
+  .project-submit.ready { opacity: 1; pointer-events: all; }
+  .project-submit.done { background: var(--success); opacity: 1; pointer-events: none; }
+
+  .progress-wrap { margin-bottom: 2vh; }
+  .progress-label { font-size: 0.7rem; color: var(--muted); margin-bottom: 5px; font-family: 'DM Mono', monospace; letter-spacing: 0.06em; }
+  .progress-bg { width: 100%; height: 4px; background: var(--border); border-radius: 2px; }
+  .progress-fill { height: 4px; background: var(--accent); border-radius: 2px; transition: width 0.3s; }
+
+  .change-name { margin-top: auto; padding-top: 2vh; text-align: center; font-size: 0.75rem; color: var(--muted); text-decoration: underline; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<div class="logo"><a href="index.html">Cosa<em>Retreat</em></a> &nbsp;·&nbsp; <a href="index.html" style="font-size:0.75rem;color:var(--muted);text-decoration:none;">← Home</a></div>
+
+<!-- NOME -->
+<div id="screen-name" class="screen active">
+  <div class="title">AI<em>deas</em></div>
+  <div class="subtitle">Vota i progetti AI del team.<br>Scegli il tuo nome per iniziare.</div>
+  <div class="name-list" id="nameList"></div>
+</div>
+
+<!-- VOTO -->
+<div id="screen-vote" class="screen">
+  <div class="progress-wrap">
+    <div class="progress-label" id="progressLabel">0 / 4 progetti votati</div>
+    <div class="progress-bg"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+  <div class="projects-wrap" id="projectsWrap"></div>
+</div>
+
+<!-- DONE -->
+<div id="screen-done" class="screen">
+  <div class="center-msg">
+    <div style="font-size:3rem">🚀</div>
+    <div class="big">Voti inviati!</div>
+    <div class="small">Guarda i risultati sullo schermo dell'host.</div>
+  </div>
+</div>
+
+<div class="change-name" id="changeName">Non sei tu? Cambia</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script>
+var PLAYERS = ["Marco","Francesca","Tommaso","Margherita","Federica","Stefano","Daniele","Domitilla","Carola","Andrea","Giorgia"];
+var PROJECTS = [
+  { id:"01", titolo:"Delivery Planner",    autore:"Carola",     emoji:"📦" },
+  { id:"02", titolo:"Good Morning KAM",    autore:"Margherita", emoji:"🌅" },
+  { id:"03", titolo:"Find the Best Offer", autore:"Federica",   emoji:"🎯" },
+  { id:"04", titolo:"NBA",                 autore:"Franci",     emoji:"🏀" }
+];
+var DIMS = ["Fattibilità","Impatto sui Ricavi","Impatto su Efficienza/Costi","Generazione di Asset Unico"];
+
+firebase.initializeApp(firebaseConfig);
+var db = firebase.database();
+var aideasRef = db.ref("cosaportoAIdeas");
+
+var myName = localStorage.getItem("cosaportoAIdeasPlayer");
+var localScores = {}; // { projectId: { dimIdx: val } }
+var submitted   = {}; // { projectId: true }
+
+function show(id) {
+  document.querySelectorAll(".screen").forEach(function(s){ s.classList.remove("active"); });
+  document.getElementById(id).classList.add("active");
+}
+
+function renderNameList() {
+  var list = document.getElementById("nameList");
+  list.innerHTML = "";
+  PLAYERS.forEach(function(p){
+    var btn = document.createElement("div");
+    btn.className = "name-btn";
+    btn.textContent = p;
+    btn.addEventListener("click", function(){
+      myName = p;
+      localStorage.setItem("cosaportoAIdeasPlayer", p);
+      init();
+    });
+    list.appendChild(btn);
+  });
+}
+
+function buildVoteScreen(existingVotes) {
+  var wrap = document.getElementById("projectsWrap");
+  wrap.innerHTML = "";
+
+  PROJECTS.forEach(function(proj){
+    var alreadyVoted = existingVotes && existingVotes[proj.id];
+    if (alreadyVoted) submitted[proj.id] = true;
+
+    var card = document.createElement("div");
+    card.className = "project-card" + (alreadyVoted ? " submitted" : "");
+    card.id = "card-" + proj.id;
+
+    var dimsHtml = alreadyVoted
+      ? '<div style="font-size:0.8rem;color:var(--success);font-weight:600;margin-top:4px">✓ Voto inviato</div>'
+      : DIMS.map(function(dim, di){
+          return '<div class="dim-row">' +
+            '<div class="dim-label">' + dim + '</div>' +
+            '<div class="stars-row" id="stars-' + proj.id + '-' + di + '">' +
+            [1,2,3,4,5].map(function(v){
+              return '<button class="star-btn" onclick="setStar(\'' + proj.id + '\',' + di + ',' + v + ')">★</button>';
+            }).join('') +
+            '</div></div>';
+        }).join('');
+
+    var submitHtml = alreadyVoted ? '' :
+      '<button class="project-submit" id="submit-' + proj.id + '" onclick="submitProject(\'' + proj.id + '\')">Invia voto →</button>';
+
+    card.innerHTML =
+      '<div class="project-header">' +
+        '<div class="project-emoji">' + proj.emoji + '</div>' +
+        '<div class="project-info">' +
+          '<div class="project-num">Progetto ' + proj.id + '</div>' +
+          '<div class="project-title">' + proj.titolo + '</div>' +
+          '<div class="project-author">by ' + proj.autore + '</div>' +
+        '</div>' +
+        (alreadyVoted ? '<div class="submitted-badge">✓</div>' : '') +
+      '</div>' +
+      dimsHtml + submitHtml;
+
+    wrap.appendChild(card);
+  });
+
+  updateProgress();
+}
+
+function setStar(projId, di, val) {
+  if (!localScores[projId]) localScores[projId] = {};
+  localScores[projId][di] = val;
+
+  var row = document.getElementById("stars-" + projId + "-" + di);
+  if (row) row.querySelectorAll(".star-btn").forEach(function(btn, i){ btn.classList.toggle("lit", i < val); });
+
+  // Abilita submit se tutte e 4 le dimensioni sono votate
+  var allVoted = DIMS.every(function(_, di2){ return localScores[projId][di2] !== undefined; });
+  var submitBtn = document.getElementById("submit-" + projId);
+  if (submitBtn) submitBtn.classList.toggle("ready", allVoted);
+}
+
+function submitProject(projId) {
+  var payload = { scores: localScores[projId], name: myName, submittedAt: Date.now() };
+  aideasRef.child("votes").child(projId).child(myName).set(payload).then(function(){
+    submitted[projId] = true;
+    var card = document.getElementById("card-" + projId);
+    if (card) {
+      card.classList.add("submitted");
+      var submitBtn = document.getElementById("submit-" + projId);
+      if (submitBtn) { submitBtn.textContent = "✓ Inviato"; submitBtn.className = "project-submit done"; }
+    }
+    updateProgress();
+    if (Object.keys(submitted).length === PROJECTS.length) {
+      setTimeout(function(){ show("screen-done"); }, 800);
+    }
+  });
+}
+
+function updateProgress() {
+  var count = Object.keys(submitted).length;
+  var pct = (count / PROJECTS.length) * 100;
+  document.getElementById("progressFill").style.width = pct + "%";
+  document.getElementById("progressLabel").textContent = count + " / " + PROJECTS.length + " progetti votati";
+}
+
+function init() {
+  if (!myName || PLAYERS.indexOf(myName) === -1) {
+    renderNameList();
+    show("screen-name");
+    return;
+  }
+
+  // Carica voti già dati
+  aideasRef.child("votes").once("value").then(function(snap){
+    var allVotes = snap.val() || {};
+    var myVotes = {};
+    PROJECTS.forEach(function(proj){
+      if (allVotes[proj.id] && allVotes[proj.id][myName]) {
+        myVotes[proj.id] = allVotes[proj.id][myName];
+        submitted[proj.id] = true;
+      }
+    });
+
+    buildVoteScreen(myVotes);
+    show("screen-vote");
+  });
+}
+
+document.getElementById("changeName").addEventListener("click", function(){
+  localStorage.removeItem("cosaportoAIdeasPlayer");
+  myName = null;
+  localScores = {}; submitted = {};
+  renderNameList();
+  show("screen-name");
+});
+
+renderNameList();
+init();
+</script>
+</body>
+</html>
