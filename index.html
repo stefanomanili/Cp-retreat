@@ -570,13 +570,13 @@
 
 <nav id="nav">
   <button class="nav-btn active" onclick="showSection('agenda', this)">Agenda</button>
-  <button class="nav-btn" onclick="showSection('playbook', this)">Playbook</button>
-  <button class="nav-btn" onclick="showSection('scenari', this)">Scenari Role Play</button>
-  <button class="nav-btn" onclick="showSection('obiezioni', this)">Gestione Obiezioni</button>
-  <button class="nav-btn" onclick="showSection('feedback', this)">Scheda Feedback</button>
-  <button class="nav-btn" onclick="showSection('timer', this)">⏱ Timer</button>
-  <button class="nav-btn" onclick="showSection('quiz', this)">🎮 Quiz</button>
   <button class="nav-btn" onclick="showSection('sky', this)">🚀 Sky is the limit</button>
+  <button class="nav-btn" onclick="showSection('playbook', this)">Playbook</button>
+  <button class="nav-btn" onclick="showSection('obiezioni', this)">Gestione Obiezioni</button>
+  <button class="nav-btn" onclick="showSection('scenari', this)">Role Play</button>
+  <button class="nav-btn" onclick="showSection('feedback', this)">⭐ Feedback</button>
+  <button class="nav-btn" onclick="showSection('quiz', this)">🎮 Sales Machine</button>
+  <button class="nav-btn" onclick="showSection('timer', this)">⏱ Timer</button>
 </nav>
 
 <!-- ══════════ AGENDA ══════════ -->
@@ -584,20 +584,7 @@
   <div class="hero">
     <h1>Sky is<br><em>the limit!</em></h1>
     <p class="subtitle">Due giorni per crescere insieme — mindset, vendita, e qualche momento di respiro.</p>
-    <div class="stat-row">
-      <div class="stat">
-        <div class="stat-num">2</div>
-        <div class="stat-label">Giorni</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">3</div>
-        <div class="stat-label">Workshop</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">2</div>
-        <div class="stat-label">Speaker</div>
-      </div>
-    </div>
+
   </div>
 
   <!-- GIORNO 1 -->
@@ -847,24 +834,57 @@
 
 <!-- ══════════ FEEDBACK ══════════ -->
 <section class="section" id="feedback">
-  <h1>Scheda<br><em>Feedback</em></h1>
-  <p class="subtitle">Da compilare dopo ogni role play. L'osservatore valuta il venditore su 5 dimensioni.</p>
+  <h1>Role Play<br><em>Feedback</em></h1>
+  <p class="subtitle">Ogni partecipante valuta il venditore dal proprio telefono. L'host vede i risultati aggregati in tempo reale.</p>
   <hr class="divider">
 
-  <div class="card">
-    <h3>Valutazione del venditore</h3>
-    <div class="score-grid" id="score-grid"></div>
-    <hr class="divider" style="margin:16px 0">
-    <h3 style="margin-bottom:10px">Cosa ha funzionato</h3>
-    <textarea class="feedback-note" placeholder="Es. ha ascoltato molto, ha qualificato il budget, non si è perso sull'obiezione del prezzo..."></textarea>
-    <h3 style="margin-bottom:10px">Cosa migliorare</h3>
-    <textarea class="feedback-note" placeholder="Es. non ha chiuso con un passo successivo, ha dato troppa informazione troppo presto..."></textarea>
-    <h3 style="margin-bottom:10px">La tecnica migliore usata</h3>
-    <textarea class="feedback-note" placeholder="Una frase o gesto specifico che ha colpito l'osservatore..." style="min-height:54px"></textarea>
-    <div style="display:flex;gap:10px;margin-top:4px">
-      <button class="btn primary" onclick="printFeedback()">Stampa / Salva PDF</button>
-      <button class="btn" onclick="resetFeedback()">Reset</button>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px">
+    <div class="card" style="text-align:center">
+      <h3 style="margin-bottom:12px">🖥️ Conduttore</h3>
+      <p style="color:var(--muted);font-size:13px;margin-bottom:16px">Seleziona lo scenario attivo, apri il feedback e vedi i voti in tempo reale con medie e commenti.</p>
+      <a href="feedback-host.html" target="_blank" class="btn primary" style="display:inline-block;text-decoration:none;padding:10px 20px">Apri Host →</a>
     </div>
+    <div class="card" style="text-align:center">
+      <h3 style="margin-bottom:12px">📱 Partecipanti</h3>
+      <p style="color:var(--muted);font-size:13px;margin-bottom:16px">Ogni partecipante vota su 5 dimensioni + commento. Il venditore dello scenario è escluso automaticamente.</p>
+      <a href="feedback-player.html" target="_blank" class="btn" style="display:inline-block;text-decoration:none;padding:10px 20px">Apri Player →</a>
+    </div>
+  </div>
+
+  <div class="card" style="text-align:center">
+    <h3 style="margin-bottom:16px">QR Code — Player</h3>
+    <div style="display:flex;justify-content:center;margin-bottom:16px">
+      <canvas id="qr-feedback-canvas" width="180" height="180" style="border-radius:8px;border:4px solid var(--border)"></canvas>
+    </div>
+    <p style="color:var(--muted);font-size:13px">Punta a <code style="font-family:'DM Mono',monospace;color:var(--accent)">feedback-player.html</code></p>
+  </div>
+
+  <hr class="divider">
+  <h3 style="margin-bottom:12px">Dimensioni valutate</h3>
+  <div style="display:flex;flex-wrap:wrap;gap:8px">
+    ${["Ascolto attivo","Discovery (domande)","Gestione obiezioni","Closing & next step","Tono e linguaggio"].map(d =>
+      `<span style="font-size:13px;background:var(--surface2);border:1px solid var(--border);padding:5px 12px;border-radius:20px;color:var(--muted)">${d}</span>`
+    ).join('')}
+  </div>
+
+  <hr class="divider">
+  <h3 style="margin-bottom:12px">Cast per scenario</h3>
+  <div style="display:flex;flex-direction:column;gap:0">
+    ${[
+      {num:"01", titolo:"Il pranzo mensile che non decolla",     v:"Franci",  c:"Domi"},
+      {num:"02", titolo:"Il budget che non c'è (ancora)",       v:"Fede",    c:"Marco"},
+      {num:"03", titolo:"Il confronto prezzi al ribasso",        v:"Marghe",  c:"Stefano"},
+      {num:"04", titolo:"Il cliente vago che non sa cosa vuole", v:"Tommy",   c:"Daniele"},
+      {num:"05", titolo:"Il cliente attivo che non cresce",      v:"Carola",  c:"Marco"},
+      {num:"06", titolo:"Il gatekeeper impossibile",             v:"Marco",   c:"Stefano"}
+    ].map(s => `
+      <div class="agenda-row">
+        <div class="agenda-time" style="min-width:44px;font-size:12px">${s.num}</div>
+        <div class="agenda-content">
+          <div class="agenda-title" style="font-size:13px">${s.titolo}</div>
+          <div class="agenda-desc">🎙️ ${s.v} &nbsp;·&nbsp; 🧑‍💼 ${s.c}</div>
+        </div>
+      </div>`).join('')}
   </div>
 </section>
 
@@ -991,6 +1011,29 @@
     ).join('')}
   </div>
   <p style="font-size:12px;color:var(--muted);margin-top:8px">Per ogni anno: 2026 · 2027 · 2028 · 2029 · 2030</p>
+
+  <hr class="divider">
+  <h3 style="margin-bottom:6px">La Cosaporto che vogliamo — Numeri condivisi</h3>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Compila qui i numeri decisi insieme dal gruppo. Clicca su una cella per modificarla.</p>
+
+  <div style="overflow-x:auto">
+    <table id="shared-table" style="width:100%;border-collapse:collapse;background:var(--surface);border-radius:10px;overflow:hidden;border:1px solid var(--border)">
+      <thead>
+        <tr>
+          <th style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);background:var(--surface2)">Metrica</th>
+          ${["2026","2027","2028","2029","2030"].map(y =>
+            `<th style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);padding:10px 14px;text-align:right;border-bottom:1px solid var(--border);background:var(--surface2)">${y}</th>`
+          ).join('')}
+        </tr>
+      </thead>
+      <tbody id="shared-tbody"></tbody>
+    </table>
+  </div>
+
+  <div style="display:flex;gap:10px;margin-top:14px">
+    <button class="btn" onclick="clearSharedTable()">Reset tabella</button>
+    <button class="btn primary" onclick="window.print()">🖨️ Stampa</button>
+  </div>
 </section>
 
 <script>
@@ -1144,6 +1187,7 @@ const scenari = [
     tag: "Catering ricorrente",
     tagClass: "soft",
     titolo: "Il pranzo mensile che non decolla",
+    cast: { venditore: "Franci", cliente: "Domi" },
     contesto: "Ufficio di consulenza, 45 persone a Milano. L'HR manager ha già un fornitore attuale ma riceve lamentele sul cibo.",
     ruolo_venditore: "Commercial Manager Cosaporto. Stai chiamando in cold (hai trovato il contatto su LinkedIn).",
     ruolo_cliente: "HR Manager. Educata ma di fretta. Ha un fornitore attuale da 2 anni. Non odia il servizio ma non è felicissima.",
@@ -1157,6 +1201,7 @@ const scenari = [
     tag: "Gifting aziendale",
     tagClass: "accent",
     titolo: "Il budget che non c'è (ancora)",
+    cast: { venditore: "Fede", cliente: "Marco" },
     contesto: "Azienda tech da 200 dipendenti, Roma. Il Marketing Director vuole fare qualcosa per il Natale ma non ha ancora approvazione dal CFO.",
     ruolo_venditore: "Account Manager Cosaporto. È un inbound — lui ha compilato il form sul sito.",
     ruolo_cliente: "Marketing Director. Entusiasta ma senza potere di firma. Deve convincere il CFO con una proposta concreta.",
@@ -1170,6 +1215,7 @@ const scenari = [
     tag: "Evento corporate",
     tagClass: "hot",
     titolo: "Il confronto prezzi al ribasso",
+    cast: { venditore: "Marghe", cliente: "Stefano" },
     contesto: "Azienda farmaceutica, 80 persone, evento aperitivo a Milano tra 3 settimane. Hanno già un preventivo da un competitor a €18/persona.",
     ruolo_venditore: "Sales Cosaporto. Call di follow-up dopo aver mandato un preventivo a €26/persona.",
     ruolo_cliente: "Office Manager. Non è lei la decisore finale ma ha voce in capitolo. Ha già un'alternativa più economica in mano.",
@@ -1183,6 +1229,7 @@ const scenari = [
     tag: "Discovery call",
     tagClass: "soft",
     titolo: "Il cliente vago che non sa cosa vuole",
+    cast: { venditore: "Tommy", cliente: "Daniele" },
     contesto: "Studio legale, Torino. 30 persone. Il socio ha sentito parlare di Cosaporto da un amico ma non ha le idee chiare su cosa serve.",
     ruolo_venditore: "Sales Cosaporto. Prima call. Non sai quasi niente di loro.",
     ruolo_cliente: "Socio dello studio. Simpatico, disponibile, ma risponde in modo vago. Budget? Non sa. Frequenza? Dipende.",
@@ -1196,6 +1243,7 @@ const scenari = [
     tag: "Upsell / Retention",
     tagClass: "accent",
     titolo: "Il cliente attivo che non cresce",
+    cast: { venditore: "Carola", cliente: "Marco" },
     contesto: "Cliente Cosaporto da 8 mesi. Ordina catering mensile a Roma, 20 persone. Non ha mai provato il servizio gifting né eventi.",
     ruolo_venditore: "Account Manager. Stai facendo una call di check-in periodica.",
     ruolo_cliente: "Operations Manager. Contenta del servizio attuale. Non pensa di avere altri bisogni — ma non ha esplorato.",
@@ -1209,6 +1257,7 @@ const scenari = [
     tag: "Cold outreach",
     tagClass: "hard",
     titolo: "Il gatekeeper impossibile",
+    cast: { venditore: "Marco", cliente: "Stefano" },
     contesto: "Grande azienda assicurativa, Milano, 500 persone. Stai chiamando per la terza volta. Non riesci mai ad arrivare al decisore.",
     ruolo_venditore: "Sales Cosaporto. Hai già mandato 2 email e chiamato una volta. Adesso hai in linea l'assistente di direzione.",
     ruolo_cliente: "Assistente di direzione. Professionale, fredda. Protegge il responsabile con efficienza.",
@@ -1229,6 +1278,10 @@ function renderScenario() {
         <div>
           <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:6px">SCENARIO ${s.num}</div>
           <h2>${s.titolo}</h2>
+          <div style="margin-top:8px;display:flex;gap:8px">
+            <span style="font-size:12px;background:#fff8ec;border:1px solid var(--accent);color:var(--accent);padding:3px 10px;border-radius:20px;font-weight:600">🎙️ Venditore: ${s.cast.venditore}</span>
+            <span style="font-size:12px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:3px 10px;border-radius:20px;font-weight:600">🧑‍💼 Cliente: ${s.cast.cliente}</span>
+          </div>
         </div>
         <span class="tag ${s.tagClass}">${s.tag}</span>
       </div>
@@ -1479,11 +1532,72 @@ function generateSimpleQR(canvas, text) {
   img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(text);
 }
 
+// ── SHARED TABLE ──
+const SKY_METRICS = ["Ricavi", "EBITDA", "Clienti", "Città", "FTE"];
+const SKY_YEARS   = [2026, 2027, 2028, 2029, 2030];
+const SKY_KEY     = "cosaportoSharedNumbers";
+
+function buildSharedTable() {
+  const tbody = document.getElementById('shared-tbody');
+  if (!tbody) return;
+  const saved = JSON.parse(localStorage.getItem(SKY_KEY) || '{}');
+
+  tbody.innerHTML = SKY_METRICS.map((metric, mi) => {
+    const cells = SKY_YEARS.map((yr, yi) => {
+      const val = (saved[mi] && saved[mi][yi]) ? saved[mi][yi] : '';
+      return `<td style="padding:0;border-bottom:1px solid var(--surface2);text-align:right">
+        <input
+          type="text"
+          data-mi="${mi}" data-yi="${yi}"
+          value="${val}"
+          placeholder="—"
+          oninput="saveSharedTable()"
+          style="width:100%;border:none;background:transparent;padding:9px 14px;
+                 font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);
+                 text-align:right;outline:none;cursor:text;"
+          onfocus="this.style.background='#fff8ec'"
+          onblur="this.style.background='transparent'"
+        />
+      </td>`;
+    }).join('');
+    return `<tr>
+      <td style="padding:9px 14px;font-size:13px;font-weight:600;color:var(--muted);border-bottom:1px solid var(--surface2)">${metric}</td>
+      ${cells}
+    </tr>`;
+  }).join('');
+}
+
+function saveSharedTable() {
+  const inputs = document.querySelectorAll('#shared-tbody input');
+  const data = {};
+  inputs.forEach(function(inp) {
+    const mi = inp.dataset.mi;
+    const yi = inp.dataset.yi;
+    if (!data[mi]) data[mi] = {};
+    data[mi][yi] = inp.value;
+  });
+  localStorage.setItem(SKY_KEY, JSON.stringify(data));
+}
+
+function clearSharedTable() {
+  if (!confirm('Cancellare tutti i numeri della tabella condivisa?')) return;
+  localStorage.removeItem(SKY_KEY);
+  buildSharedTable();
+}
+
 // ── INIT ──
 renderObiezioni();
 renderScenario();
 renderScoreGrid();
 renderQuizSection();
+buildSharedTable();
+
+// QR Feedback
+const feedbackCanvas = document.getElementById('qr-feedback-canvas');
+if (feedbackCanvas) {
+  const feedbackUrl = window.location.href.replace('index.html','').replace(/\/$/, '') + '/feedback-player.html';
+  generateSimpleQR(feedbackCanvas, feedbackUrl);
+}
 
 // QR Sky
 const skyCanvas = document.getElementById('qr-sky-canvas');

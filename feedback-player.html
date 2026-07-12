@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>Feedback Role Play · CosaRetreat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f5f0; --surface: #ffffff; --surface2: #eeebe4;
+    --border: #dedad2; --accent: #b8941e; --text: #1a1814;
+    --muted: #5e5a54; --success: #2a7a48; --success-bg: #e8f5ee;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); font-family: 'DM Sans', sans-serif; color: var(--text); min-height: 100vh; }
+  body { padding: 6vw 6vw 8vw; display: flex; flex-direction: column; }
+
+  .logo { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--text); text-align: center; margin-bottom: 4vh; }
+  .logo em { color: var(--accent); font-style: italic; }
+
+  .screen { display: none; flex-direction: column; flex: 1; }
+  .screen.active { display: flex; }
+
+  /* NAME */
+  .title { font-family: 'DM Serif Display', serif; font-size: 2rem; letter-spacing: -0.5px; text-align: center; margin-bottom: 0.2em; }
+  .title em { color: var(--accent); font-style: italic; }
+  .subtitle { font-size: 0.9rem; color: var(--muted); text-align: center; margin-bottom: 3vh; line-height: 1.5; }
+  .name-list { display: flex; flex-direction: column; gap: 0.6em; }
+  .name-btn {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 0.9em 1em; font-family: 'DM Sans', sans-serif; font-size: 1rem;
+    font-weight: 500; color: var(--text); cursor: pointer; text-align: left;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .name-btn:hover { border-color: var(--accent); background: #fff8ec; }
+
+  /* WAITING */
+  .center-msg { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 1em; }
+  .center-msg .big { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--accent); }
+  .center-msg .small { font-size: 0.9rem; color: var(--muted); }
+  .spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.9s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* EXCLUDED */
+  .excluded-box {
+    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; gap: 0.8em; padding: 2em;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-top: 1em;
+  }
+  .excluded-icon { font-size: 2.5rem; }
+  .excluded-title { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--accent); }
+  .excluded-sub { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+
+  /* FEEDBACK FORM */
+  .scenario-badge {
+    background: #fff8ec; border: 1px solid var(--accent); border-radius: 8px;
+    padding: 10px 14px; margin-bottom: 2vh;
+  }
+  .scenario-num { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 3px; }
+  .scenario-title { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--text); }
+  .scenario-cast { font-size: 0.8rem; color: var(--muted); margin-top: 3px; }
+
+  .dimension-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin-bottom: 6px; }
+  .stars-row { display: flex; gap: 6px; margin-bottom: 1.4em; }
+  .star-btn {
+    font-size: 1.8rem; cursor: pointer; color: #d0ccc4;
+    transition: color 0.1s, transform 0.1s; user-select: none; background: none; border: none; padding: 0;
+  }
+  .star-btn.lit { color: var(--accent); }
+  .star-btn:active { transform: scale(1.2); }
+
+  .note-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin-bottom: 6px; }
+  .note-input {
+    width: 100%; background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 8px; padding: 0.75em 1em; font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem; color: var(--text); resize: none; min-height: 70px;
+    transition: border-color 0.15s;
+  }
+  .note-input:focus { outline: none; border-color: var(--accent); }
+  .note-input::placeholder { color: #bbb; }
+
+  .submit-btn {
+    width: 100%; padding: 1em; border-radius: 10px; border: none;
+    font-family: 'DM Serif Display', serif; font-size: 1.1rem;
+    background: var(--accent); color: #fff; cursor: pointer; margin-top: 2vh;
+    opacity: 0.4; pointer-events: none; transition: background 0.15s;
+  }
+  .submit-btn.ready { opacity: 1; pointer-events: all; }
+  .submit-btn.ready:hover { background: #a07a18; }
+
+  /* DONE */
+  .done-icon { font-size: 3rem; margin-bottom: 0.5em; }
+  .done-title { font-family: 'DM Serif Display', serif; font-size: 1.8rem; color: var(--accent); margin-bottom: 0.3em; }
+  .done-sub { font-size: 0.9rem; color: var(--muted); }
+
+  .change-name { margin-top: auto; padding-top: 2vh; text-align: center; font-size: 0.75rem; color: var(--muted); text-decoration: underline; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<div class="logo">Cosa<em>Retreat</em> · Feedback</div>
+
+<!-- SCEGLI NOME -->
+<div id="screen-name" class="screen active">
+  <div class="title">Role Play<br><em>Feedback</em></div>
+  <div class="subtitle">Valuta il venditore dopo ogni scenario.<br>Scegli il tuo nome.</div>
+  <div class="name-list" id="nameList"></div>
+</div>
+
+<!-- ATTESA -->
+<div id="screen-waiting" class="screen">
+  <div class="center-msg">
+    <div class="spinner"></div>
+    <div class="big">In attesa dello scenario...</div>
+    <div class="small">L'host attiverà il feedback a breve</div>
+  </div>
+</div>
+
+<!-- ESCLUSO (sei il venditore) -->
+<div id="screen-excluded" class="screen">
+  <div class="center-msg">
+    <div class="excluded-box">
+      <div class="excluded-icon">🎙️</div>
+      <div class="excluded-title">Sei il venditore!</div>
+      <div class="excluded-sub" id="excludedSub">Non puoi votare il tuo scenario. Aspetta il prossimo.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FORM FEEDBACK -->
+<div id="screen-form" class="screen">
+  <div class="scenario-badge">
+    <div class="scenario-num" id="formScenarioNum">Scenario 01</div>
+    <div class="scenario-title" id="formScenarioTitle">—</div>
+    <div class="scenario-cast" id="formScenarioCast">—</div>
+  </div>
+
+  <div id="dimensionsWrap"></div>
+
+  <div class="note-label">Commento libero (opzionale)</div>
+  <textarea class="note-input" id="noteInput" placeholder="Cosa ha funzionato? Cosa miglioreresti?"></textarea>
+
+  <button class="submit-btn" id="submitBtn" onclick="submitFeedback()">Invia feedback →</button>
+</div>
+
+<!-- GIÀ INVIATO -->
+<div id="screen-done" class="screen">
+  <div class="center-msg">
+    <div class="done-icon">✅</div>
+    <div class="done-title">Feedback inviato!</div>
+    <div class="done-sub">Aspetta il prossimo scenario.</div>
+  </div>
+</div>
+
+<div class="change-name" id="changeName">Non sei tu? Cambia</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script>
+var PLAYERS = ["Marco","Francesca","Tommaso","Margherita","Federica","Stefano","Daniele","Domitilla","Carola","Andrea","Giorgia"];
+var SCENARIOS = [
+  { num:"01", titolo:"Il pranzo mensile che non decolla",     venditore:"Francesca", cliente:"Domitilla" },
+  { num:"02", titolo:"Il budget che non c'è (ancora)",       venditore:"Federica",  cliente:"Marco"     },
+  { num:"03", titolo:"Il confronto prezzi al ribasso",        venditore:"Margherita",cliente:"Stefano"   },
+  { num:"04", titolo:"Il cliente vago che non sa cosa vuole", venditore:"Tommaso",   cliente:"Daniele"   },
+  { num:"05", titolo:"Il cliente attivo che non cresce",      venditore:"Carola",    cliente:"Marco"     },
+  { num:"06", titolo:"Il gatekeeper impossibile",             venditore:"Marco",     cliente:"Stefano"   }
+];
+var DIMENSIONS = [
+  "Ascolto attivo",
+  "Discovery (domande)",
+  "Gestione obiezioni",
+  "Closing & next step",
+  "Tono e linguaggio"
+];
+
+firebase.initializeApp(firebaseConfig);
+var db = firebase.database();
+var fbRoot   = db.ref("cosaportoFeedback");
+var stateRef = fbRoot.child("state");
+var votesRef = fbRoot.child("votes");
+
+var myName = localStorage.getItem("cosaportoFeedbackPlayer");
+var currentScenarioIdx = null;
+var scores = {};
+
+function show(id) {
+  document.querySelectorAll(".screen").forEach(function(s){ s.classList.remove("active"); });
+  document.getElementById(id).classList.add("active");
+}
+
+// ── NOME ──
+function renderNameList() {
+  var list = document.getElementById("nameList");
+  list.innerHTML = "";
+  PLAYERS.forEach(function(p){
+    var btn = document.createElement("div");
+    btn.className = "name-btn";
+    btn.textContent = p;
+    btn.addEventListener("click", function(){
+      myName = p;
+      localStorage.setItem("cosaportoFeedbackPlayer", p);
+      init();
+    });
+    list.appendChild(btn);
+  });
+}
+
+// ── FORM ──
+function buildForm(scenarioIdx) {
+  var s = SCENARIOS[scenarioIdx];
+  document.getElementById("formScenarioNum").textContent = "Scenario " + s.num;
+  document.getElementById("formScenarioTitle").textContent = s.titolo;
+  document.getElementById("formScenarioCast").textContent = "🎙️ " + s.venditore + "  ·  🧑‍💼 " + s.cliente;
+  document.getElementById("noteInput").value = "";
+  scores = {};
+
+  var wrap = document.getElementById("dimensionsWrap");
+  wrap.innerHTML = "";
+  DIMENSIONS.forEach(function(dim, di){
+    var row = document.createElement("div");
+    row.style.marginBottom = "1.4em";
+    row.innerHTML = "<div class='dimension-label'>" + dim + "</div>" +
+      "<div class='stars-row' id='stars-" + di + "'>" +
+      [1,2,3,4,5].map(function(v){
+        return "<button class='star-btn' data-di='" + di + "' data-val='" + v + "' onclick='setStar(" + di + "," + v + ")'>★</button>";
+      }).join("") +
+      "</div>";
+    wrap.appendChild(row);
+  });
+
+  document.getElementById("submitBtn").classList.remove("ready");
+}
+
+function setStar(di, val) {
+  scores[di] = val;
+  var row = document.getElementById("stars-" + di);
+  row.querySelectorAll(".star-btn").forEach(function(btn){
+    btn.classList.toggle("lit", parseInt(btn.dataset.val) <= val);
+  });
+  // Abilita submit se tutte le dimensioni sono votate
+  if (Object.keys(scores).length === DIMENSIONS.length) {
+    document.getElementById("submitBtn").classList.add("ready");
+  }
+}
+
+function submitFeedback() {
+  var scenarioIdx = currentScenarioIdx;
+  var payload = {
+    name: myName,
+    scores: scores,
+    note: document.getElementById("noteInput").value.trim(),
+    submittedAt: Date.now()
+  };
+  votesRef.child(scenarioIdx).child(myName).set(payload).then(function(){
+    show("screen-done");
+  });
+}
+
+// ── INIT ──
+function init() {
+  if (!myName || PLAYERS.indexOf(myName) === -1) {
+    renderNameList();
+    show("screen-name");
+    return;
+  }
+
+  stateRef.on("value", function(snap){
+    var s = snap.val() || { active: false, scenarioIdx: null };
+
+    if (!s.active || s.scenarioIdx === null) {
+      show("screen-waiting");
+      return;
+    }
+
+    currentScenarioIdx = s.scenarioIdx;
+    var scenario = SCENARIOS[s.scenarioIdx];
+
+    // Controllo se sei il venditore
+    if (scenario.venditore === myName) {
+      document.getElementById("excludedSub").textContent =
+        "Sei il venditore dello Scenario " + scenario.num + ". Aspetta il prossimo!";
+      show("screen-excluded");
+      return;
+    }
+
+    // Controllo se hai già votato
+    votesRef.child(s.scenarioIdx).child(myName).once("value").then(function(vsnap){
+      if (vsnap.val() && vsnap.val().submittedAt) {
+        show("screen-done");
+      } else {
+        buildForm(s.scenarioIdx);
+        show("screen-form");
+      }
+    });
+  });
+}
+
+document.getElementById("changeName").addEventListener("click", function(){
+  localStorage.removeItem("cosaportoFeedbackPlayer");
+  myName = null;
+  stateRef.off();
+  renderNameList();
+  show("screen-name");
+});
+
+renderNameList();
+init();
+</script>
+</body>
+</html>
