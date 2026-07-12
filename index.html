@@ -991,6 +991,97 @@ function showSection(id, btn) {
   btn.classList.add('active');
 }
 
+// ── OBIEZIONI DATA ──
+const obiezioni = [
+  {
+    quote: "Abbiamo già un fornitore con cui siamo soddisfatti",
+    tag: "hard", tagLabel: "Frequente",
+    motivazione: "Non è un rifiuto — è una porta semi-aperta. Il cliente vuole sicurezza prima di rischiare un cambiamento.",
+    steps: [
+      { label: "Riconosci", text: "Normale avere un fornitore di riferimento. Significa che il tema è importante per voi." },
+      { label: "Domanda", text: "C'è qualcosa che oggi vorreste migliorare, anche solo su un aspetto — flessibilità, varietà, gestione last minute?" },
+      { label: "Proponi pilota", text: "Capisco la riluttanza a cambiare. Potremmo partire da un singolo evento o da una città dove magari avete meno copertura?" }
+    ],
+    script: "Ottimo segno che abbiate già strutturato questo. Non voglio sostituire nessuno — ma spesso lavoriamo in affiancamento, soprattutto su eventi specifici o città dove il vostro fornitore non arriva."
+  },
+  {
+    quote: "Costa troppo rispetto agli altri",
+    tag: "hard", tagLabel: "Frequente",
+    motivazione: "Spesso è una richiesta di giustificazione del valore, non un vero blocco sul budget.",
+    steps: [
+      { label: "Non difenderti", text: "Non entrare in una battaglia sul prezzo. Chiedi cosa include il confronto." },
+      { label: "Esplora", text: "Il preventivo che avete ricevuto include la logistica, il personale, il servizio post-evento?" },
+      { label: "Riposiziona", text: "Il nostro prezzo include [X, Y, Z]. Confrontando le stesse voci, siamo spesso in linea." }
+    ],
+    script: "Capisco. Può succedere che a prima vista sembri più alto. Mi aiuta a capire cosa include il preventivo che avete ricevuto? A volte le voci non sono comparabili 1:1."
+  },
+  {
+    quote: "Devo sentire altri fornitori prima di decidere",
+    tag: "soft", tagLabel: "Normale",
+    motivazione: "È una risposta di processo, non di disinteresse. Serve aiutarlo a capire perché Cosaporto dovrebbe essere la scelta finale.",
+    steps: [
+      { label: "Valida", text: "Assolutamente, ha senso fare un confronto." },
+      { label: "Differenzia ora", text: "Per facilitarvi, vi posso anticipare i punti su cui ci differenziamo di più." },
+      { label: "Tieni la porta", text: "Quando avrete i preventivi, mi dite dove siamo fuori linea — ci piacerebbe restare in corsa." }
+    ],
+    script: "Ottima idea. Mentre fate il giro, teneteci in considerazione soprattutto per [punto di forza 1] e [punto di forza 2]. Quando avete tutto, sono disponibile per un rapido confronto."
+  },
+  {
+    quote: "Non è il momento giusto, magari a settembre",
+    tag: "soft", tagLabel: "Rinvio",
+    motivazione: "Spesso è una gentile via di uscita. Ma a volte è reale — il calendario aziendale ha ritmi precisi.",
+    steps: [
+      { label: "Rispetta", text: "Perfetto, settembre è un momento classico per riprendere i piani." },
+      { label: "Pianta un seme", text: "Nel frattempo posso mandarvi un caso studio di un'azienda simile alla vostra?" },
+      { label: "Prenota il futuro", text: "Possiamo già mettere in agenda una call a inizio settembre, così non si perde?" }
+    ],
+    script: "Capito, rispetto i vostri tempi. Possiamo metterci in agenda per la prima settimana di settembre? Così partiamo con tutto pronto."
+  },
+  {
+    quote: "Devo chiedere l'approvazione al mio responsabile",
+    tag: "accent", tagLabel: "Decisore",
+    motivazione: "Stai parlando con chi usa il servizio, non con chi decide. Non è un'obiezione — è un segnale che devi allargare la conversazione.",
+    steps: [
+      { label: "Riconosci", text: "Certo, è normale. Come funziona di solito il processo di approvazione?" },
+      { label: "Offri materiale", text: "Posso preparare una sintesi di 1 pagina da girare al responsabile?" },
+      { label: "Chiedi un intro", text: "Sarebbe possibile coinvolgerlo in una call breve? Spesso aiuta rispondere alle sue domande direttamente." }
+    ],
+    script: "Assolutamente comprensibile. Vuole che le prepari una sintesi con i punti chiave — costo, logistica, referenze — da condividere con il suo responsabile?"
+  },
+  {
+    quote: "Non ho tempo adesso",
+    tag: "soft", tagLabel: "Timing",
+    motivazione: "Spesso è un rifiuto mascherato da agenda. La chiave è essere brevi e proporre qualcosa di minimo.",
+    steps: [
+      { label: "Rispetta subito", text: "Capito, non è il momento. Ci vogliono 90 secondi per dirle una cosa sola che potrebbe interessarle — posso?" },
+      { label: "Mini-pitch", text: "Se no, quando posso richiamare? Mattina o pomeriggio?" }
+    ],
+    script: "Capisco. Mi basta un minuto per lasciarle un'idea — se non è rilevante la smetto subito. Posso?"
+  },
+  {
+    quote: "Lo facciamo internamente / ci pensa il nostro ufficio acquisti",
+    tag: "hard", tagLabel: "Struttura interna",
+    motivazione: "Il cliente ha già una soluzione ma potrebbe non essere soddisfatto o potrebbe avere bisogno di supporto per scale o eventi speciali.",
+    steps: [
+      { label: "Valida", text: "Ottimo — avere una struttura interna è un vantaggio." },
+      { label: "Cerca il gap", text: "Capita di avere picchi di richiesta, eventi fuori sede o città dove non avete copertura?" },
+      { label: "Proponi complementarietà", text: "Molti nostri clienti usano Cosaporto proprio per queste eccezioni, senza sostituire niente." }
+    ],
+    script: "Ha senso. Noi lavoriamo spesso come supporto nelle situazioni straordinarie — eventi speciali, picchi, città secondarie. Posso lasciarle un contatto per quando serve?"
+  },
+  {
+    quote: "Mandatemi un'email con i dettagli",
+    tag: "soft", tagLabel: "Rinvio",
+    motivazione: "Un modo educato per chiudere la conversazione senza dire no. Serve ancorare qualcosa di concreto.",
+    steps: [
+      { label: "Accetta e ancora", text: "Certo, gliela mando oggi stesso. Prima di farlo, ho due domande veloci per personalizzarla." },
+      { label: "Qualifica", text: "Quante persone mediamente, e con che frequenza pensate di avere bisogno del servizio?" },
+      { label: "Prenota il follow-up", text: "Le mando l'email e mi permetto di richiamarla giovedì mattina — va bene?" }
+    ],
+    script: "Certamente. Per mandarle qualcosa di utile e non generico: parliamo di quante persone approssimativamente? Così la proposta è già calibrata."
+  }
+];
+
 // ── OBIEZIONI RENDER ──
 function renderObiezioni() {
   const container = document.getElementById('obiezioni-list');
@@ -1200,16 +1291,10 @@ const scoreCategories = [
 ];
 
 function renderScoreGrid() {
-  const grid = document.getElementById('score-grid');
-  grid.innerHTML = scoreCategories.map((cat, i) => `
-    <div class="score-item">
-      <div class="score-name">${cat}</div>
-      <div class="score-stars" id="stars-${i}">
-        ${[1,2,3,4,5].map(s => `<span class="star" onclick="setScore(${i},${s})">★</span>`).join('')}
-      </div>
-    </div>
-  `).join('');
+  // La scheda feedback statica è stata sostituita dalla versione Firebase
+  // Questa funzione è mantenuta per compatibilità ma non fa nulla
 }
+
 
 const scores = {};
 function setScore(cat, val) {
@@ -1357,6 +1442,30 @@ function renderQuizSection() {
   }
 
 
+
+// ── SKY METRICS ──
+function buildSkyMetrics() {
+  var grid = document.getElementById('sky-metrics-grid');
+  if (!grid) return;
+  ['Ricavi','EBITDA','Clienti','Città','FTE'].forEach(function(m){
+    var div = document.createElement('div');
+    div.className = 'card';
+    div.style.cssText = 'text-align:center;padding:16px 12px';
+    div.innerHTML = '<div style="font-size:13px;font-weight:600;color:var(--text)">' + m + '</div>';
+    grid.appendChild(div);
+  });
+
+  var thead = document.getElementById('shared-thead');
+  if (thead && !thead.innerHTML) {
+    var thStyle = "font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface2);";
+    var row = '<tr><th style="' + thStyle + 'text-align:left;color:var(--muted)">Metrica</th>';
+    ['2026','2027','2028','2029','2030'].forEach(function(y){
+      row += '<th style="' + thStyle + 'text-align:right;color:var(--accent)">' + y + '</th>';
+    });
+    row += '</tr>';
+    thead.innerHTML = row;
+  }
+}
 
 // ── FEEDBACK SECTION ──
 function buildFeedbackSection() {
