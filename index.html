@@ -7,7 +7,7 @@
 <meta name="supported-color-schemes" content="light">
 <title>Cosaporto · Sales Workshop</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Montserrat:wght@400;500;600;700&display=swap');
 
   :root, html, body {
     color-scheme: light;
@@ -37,7 +37,7 @@
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Montserrat', 'DM Sans', sans-serif;
     font-size: 15px;
     line-height: 1.6;
     min-height: 100vh;
@@ -107,7 +107,7 @@
     background: none;
     border: none;
     color: var(--muted);
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Montserrat', 'DM Sans', sans-serif;
     font-size: 13px;
     font-weight: 500;
     padding: 14px 16px;
@@ -350,7 +350,7 @@
     background: none;
     border: 1px solid var(--border);
     color: var(--text);
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Montserrat', 'DM Sans', sans-serif;
     font-size: 13px;
     font-weight: 500;
     padding: 8px 16px;
@@ -498,7 +498,7 @@
     border-radius: 8px;
     padding: 12px 14px;
     color: var(--text);
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Montserrat', 'DM Sans', sans-serif;
     font-size: 14px;
     resize: vertical;
     min-height: 80px;
@@ -571,11 +571,11 @@
 <nav id="nav">
   <button class="nav-btn active" onclick="showSection('agenda', this)">Agenda</button>
   <button class="nav-btn" onclick="showSection('sky', this)">🚀 Sky is the limit</button>
+  <button class="nav-btn" onclick="showSection('quiz', this)">🎮 Sales Machine</button>
   <button class="nav-btn" onclick="showSection('playbook', this)">Playbook</button>
   <button class="nav-btn" onclick="showSection('obiezioni', this)">Gestione Obiezioni</button>
   <button class="nav-btn" onclick="showSection('scenari', this)">Role Play</button>
   <button class="nav-btn" onclick="showSection('feedback', this)">⭐ Feedback</button>
-  <button class="nav-btn" onclick="showSection('quiz', this)">🎮 Sales Machine</button>
   <button class="nav-btn" onclick="showSection('timer', this)">⏱ Timer</button>
 </nav>
 
@@ -861,31 +861,11 @@
 
   <hr class="divider">
   <h3 style="margin-bottom:12px">Dimensioni valutate</h3>
-  <div style="display:flex;flex-wrap:wrap;gap:8px">
-    ${["Ascolto attivo","Discovery (domande)","Gestione obiezioni","Closing & next step","Tono e linguaggio"].map(d =>
-      `<span style="font-size:13px;background:var(--surface2);border:1px solid var(--border);padding:5px 12px;border-radius:20px;color:var(--muted)">${d}</span>`
-    ).join('')}
-  </div>
+  <div id="feedback-dims" style="display:flex;flex-wrap:wrap;gap:8px"></div>
 
   <hr class="divider">
   <h3 style="margin-bottom:12px">Cast per scenario</h3>
-  <div style="display:flex;flex-direction:column;gap:0">
-    ${[
-      {num:"01", titolo:"Il pranzo mensile che non decolla",     v:"Franci",  c:"Domi"},
-      {num:"02", titolo:"Il budget che non c'è (ancora)",       v:"Fede",    c:"Marco"},
-      {num:"03", titolo:"Il confronto prezzi al ribasso",        v:"Marghe",  c:"Stefano"},
-      {num:"04", titolo:"Il cliente vago che non sa cosa vuole", v:"Tommy",   c:"Daniele"},
-      {num:"05", titolo:"Il cliente attivo che non cresce",      v:"Carola",  c:"Marco"},
-      {num:"06", titolo:"Il gatekeeper impossibile",             v:"Marco",   c:"Stefano"}
-    ].map(s => `
-      <div class="agenda-row">
-        <div class="agenda-time" style="min-width:44px;font-size:12px">${s.num}</div>
-        <div class="agenda-content">
-          <div class="agenda-title" style="font-size:13px">${s.titolo}</div>
-          <div class="agenda-desc">🎙️ ${s.v} &nbsp;·&nbsp; 🧑‍💼 ${s.c}</div>
-        </div>
-      </div>`).join('')}
-  </div>
+  <div id="feedback-cast" style="display:flex;flex-direction:column;gap:0"></div>
 </section>
 
 <!-- ══════════ TIMER ══════════ -->
@@ -1003,13 +983,7 @@
 
   <hr class="divider">
   <h3 style="margin-bottom:16px">Metriche richieste</h3>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:8px">
-    ${["Ricavi","EBITDA","Clienti","Città","FTE"].map(m =>
-      `<div class="card" style="text-align:center;padding:16px 12px">
-        <div style="font-size:13px;font-weight:600;color:var(--text)">${m}</div>
-      </div>`
-    ).join('')}
-  </div>
+  <div id="sky-metrics-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:8px"></div>
   <p style="font-size:12px;color:var(--muted);margin-top:8px">Per ogni anno: 2026 · 2027 · 2028 · 2029 · 2030</p>
 
   <hr class="divider">
@@ -1018,14 +992,7 @@
 
   <div style="overflow-x:auto">
     <table id="shared-table" style="width:100%;border-collapse:collapse;background:var(--surface);border-radius:10px;overflow:hidden;border:1px solid var(--border)">
-      <thead>
-        <tr>
-          <th style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);background:var(--surface2)">Metrica</th>
-          ${["2026","2027","2028","2029","2030"].map(y =>
-            `<th style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);padding:10px 14px;text-align:right;border-bottom:1px solid var(--border);background:var(--surface2)">${y}</th>`
-          ).join('')}
-        </tr>
-      </thead>
+      <thead id="shared-thead"></thead>
       <tbody id="shared-tbody"></tbody>
     </table>
   </div>
@@ -1532,6 +1499,67 @@ function generateSimpleQR(canvas, text) {
   img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(text);
 }
 
+// ── SKY METRICS GRID ──
+function buildSkyMetrics() {
+  var grid = document.getElementById('sky-metrics-grid');
+  if (!grid) return;
+  ['Ricavi','EBITDA','Clienti','Città','FTE'].forEach(function(m){
+    var div = document.createElement('div');
+    div.className = 'card';
+    div.style.cssText = 'text-align:center;padding:16px 12px';
+    div.innerHTML = '<div style="font-size:13px;font-weight:600;color:var(--text)">' + m + '</div>';
+    grid.appendChild(div);
+  });
+
+  // Header tabella condivisa
+  var thead = document.getElementById('shared-thead');
+  if (thead) {
+    var thStyle = "font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface2);";
+    var row = '<tr><th style="' + thStyle + 'text-align:left;color:var(--muted)">Metrica</th>';
+    ['2026','2027','2028','2029','2030'].forEach(function(y){
+      row += '<th style="' + thStyle + 'text-align:right;color:var(--accent)">' + y + '</th>';
+    });
+    row += '</tr>';
+    thead.innerHTML = row;
+  }
+}
+
+// ── FEEDBACK SECTION ──
+function buildFeedbackSection() {
+  var dims = document.getElementById('feedback-dims');
+  if (dims) {
+    ['Ascolto attivo','Discovery (domande)','Gestione obiezioni','Closing & next step','Tono e linguaggio'].forEach(function(d){
+      var span = document.createElement('span');
+      span.style.cssText = 'font-size:13px;background:var(--surface2);border:1px solid var(--border);padding:5px 12px;border-radius:20px;color:var(--muted)';
+      span.textContent = d;
+      dims.appendChild(span);
+    });
+  }
+
+  var cast = document.getElementById('feedback-cast');
+  if (cast) {
+    var scenarios = [
+      {num:"01", titolo:"Il pranzo mensile che non decolla",     v:"Franci",  c:"Domi"},
+      {num:"02", titolo:"Il budget che non c'è (ancora)",       v:"Fede",    c:"Marco"},
+      {num:"03", titolo:"Il confronto prezzi al ribasso",        v:"Marghe",  c:"Stefano"},
+      {num:"04", titolo:"Il cliente vago che non sa cosa vuole", v:"Tommy",   c:"Daniele"},
+      {num:"05", titolo:"Il cliente attivo che non cresce",      v:"Carola",  c:"Marco"},
+      {num:"06", titolo:"Il gatekeeper impossibile",             v:"Marco",   c:"Stefano"}
+    ];
+    scenarios.forEach(function(s){
+      var row = document.createElement('div');
+      row.className = 'agenda-row';
+      row.innerHTML =
+        '<div class="agenda-time" style="min-width:44px;font-size:12px">' + s.num + '</div>' +
+        '<div class="agenda-content">' +
+          '<div class="agenda-title" style="font-size:13px">' + s.titolo + '</div>' +
+          '<div class="agenda-desc">🎙️ ' + s.v + ' &nbsp;·&nbsp; 🧑‍💼 ' + s.c + '</div>' +
+        '</div>';
+      cast.appendChild(row);
+    });
+  }
+}
+
 // ── SHARED TABLE ──
 const SKY_METRICS = ["Ricavi", "EBITDA", "Clienti", "Città", "FTE"];
 const SKY_YEARS   = [2026, 2027, 2028, 2029, 2030];
@@ -1590,6 +1618,8 @@ renderObiezioni();
 renderScenario();
 renderScoreGrid();
 renderQuizSection();
+buildSkyMetrics();
+buildFeedbackSection();
 buildSharedTable();
 
 // QR Feedback
