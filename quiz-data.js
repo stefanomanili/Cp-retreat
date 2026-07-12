@@ -1,7 +1,7 @@
 // Dati condivisi del quiz "La Macchina degli Appuntamenti" - Cosaporto
 // Usato sia da host.html che da player.html
 
-var PLAYERS = ["Marco","Francesca","Tommaso","Margherita","Federica","Stefano"];
+var PLAYERS = ["Marco","Francesca","Tommaso","Margherita","Federica","Stefano","Daniele","Domitilla","Carola","Andrea","Giorgia"];
 var LABELS  = ["A","B","C","D"];
 
 var PROFILES = [
