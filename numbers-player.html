@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>Sky is the limit · CosaRetreat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --surface: #ffffff;
+    --surface2: #eeebe4;
+    --border: #dedad2;
+    --accent: #b8941e;
+    --text: #1a1814;
+    --muted: #5e5a54;
+    --success: #2a7a48;
+    --success-bg: #e8f5ee;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); font-family: 'DM Sans', sans-serif; color: var(--text); min-height: 100vh; }
+  body { padding: 6vw 6vw 8vw; display: flex; flex-direction: column; }
+
+  .logo { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--text); text-align: center; margin-bottom: 4vh; }
+  .logo em { color: var(--accent); font-style: italic; }
+
+  .screen { display: none; flex-direction: column; flex: 1; }
+  .screen.active { display: flex; }
+
+  /* NAME */
+  .title { font-family: 'DM Serif Display', serif; font-size: 2rem; letter-spacing: -0.5px; text-align: center; margin-bottom: 0.2em; }
+  .title em { color: var(--accent); font-style: italic; }
+  .subtitle { font-size: 0.9rem; color: var(--muted); text-align: center; margin-bottom: 3vh; line-height: 1.5; }
+
+  .name-list { display: flex; flex-direction: column; gap: 0.6em; }
+  .name-btn {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 0.9em 1em; font-family: 'DM Sans', sans-serif; font-size: 1rem;
+    font-weight: 500; color: var(--text); cursor: pointer;
+    transition: border-color 0.15s, background 0.15s; text-align: left;
+  }
+  .name-btn:hover { border-color: var(--accent); background: #fff8ec; }
+
+  /* WAITING */
+  .center-msg { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 1em; }
+  .center-msg .big { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--accent); }
+  .center-msg .small { font-size: 0.9rem; color: var(--muted); }
+  .spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.9s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* FORM */
+  .form-header { margin-bottom: 2.5vh; }
+  .form-name { font-family: 'DM Serif Display', serif; font-size: 1.5rem; margin-bottom: 0.2em; }
+  .form-name em { color: var(--accent); font-style: italic; }
+  .form-sub { font-size: 0.85rem; color: var(--muted); }
+
+  .years-nav { display: flex; gap: 6px; margin-bottom: 2vh; overflow-x: auto; scrollbar-width: none; }
+  .years-nav::-webkit-scrollbar { display: none; }
+  .year-tab {
+    font-family: 'DM Mono', monospace; font-size: 0.75rem; font-weight: 500;
+    padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--muted); cursor: pointer;
+    white-space: nowrap; transition: all 0.15s; flex-shrink: 0;
+  }
+  .year-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .year-tab.filled { border-color: var(--accent); color: var(--accent); }
+
+  .year-panel { display: none; }
+  .year-panel.active { display: block; }
+
+  .metric-row { margin-bottom: 1.2em; }
+  .metric-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin-bottom: 5px; }
+  .metric-input {
+    width: 100%; background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 8px; padding: 0.75em 1em;
+    font-family: 'DM Sans', sans-serif; font-size: 1rem; color: var(--text);
+    transition: border-color 0.15s;
+  }
+  .metric-input:focus { outline: none; border-color: var(--accent); }
+  .metric-input::placeholder { color: #bbb; }
+  .metric-hint { font-size: 0.72rem; color: var(--muted); margin-top: 3px; }
+
+  .year-actions { display: flex; gap: 8px; margin-top: 1.5vh; }
+  .btn {
+    flex: 1; padding: 0.8em; border-radius: 8px; border: 1px solid var(--border);
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 500;
+    cursor: pointer; background: var(--surface); color: var(--text);
+    transition: all 0.15s;
+  }
+  .btn:hover { border-color: var(--accent); }
+  .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn.primary:hover { background: #a07a18; }
+
+  .submit-bar { margin-top: 2.5vh; }
+  .submit-btn {
+    width: 100%; padding: 1em; border-radius: 10px; border: none;
+    font-family: 'DM Serif Display', serif; font-size: 1.1rem;
+    background: var(--accent); color: #fff; cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    opacity: 0.4; pointer-events: none;
+  }
+  .submit-btn.ready { opacity: 1; pointer-events: all; }
+  .submit-btn.ready:hover { background: #a07a18; transform: translateY(-1px); }
+
+  .progress-bar-wrap { margin-bottom: 2vh; }
+  .progress-label { font-size: 0.72rem; color: var(--muted); margin-bottom: 5px; font-family: 'DM Mono', monospace; letter-spacing: 0.06em; }
+  .progress-bg { width: 100%; height: 4px; background: var(--border); border-radius: 2px; }
+  .progress-fill { height: 4px; background: var(--accent); border-radius: 2px; transition: width 0.3s; }
+
+  /* DONE */
+  .done-icon { font-size: 3rem; margin-bottom: 0.5em; }
+  .done-title { font-family: 'DM Serif Display', serif; font-size: 1.8rem; color: var(--accent); margin-bottom: 0.3em; }
+  .done-sub { font-size: 0.9rem; color: var(--muted); }
+
+  .change-name { margin-top: auto; padding-top: 2vh; text-align: center; font-size: 0.75rem; color: var(--muted); text-decoration: underline; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<div class="logo">Cosa<em>Retreat</em></div>
+
+<!-- SCEGLI NOME -->
+<div id="screen-name" class="screen active">
+  <div class="title">Sky is<br><em>the limit</em></div>
+  <div class="subtitle">La Cosaporto che vogliamo.<br>Scegli il tuo nome per iniziare.</div>
+  <div class="name-list" id="nameList"></div>
+</div>
+
+<!-- ATTESA -->
+<div id="screen-waiting" class="screen">
+  <div class="center-msg">
+    <div class="spinner"></div>
+    <div class="big">In attesa dell'host...</div>
+    <div class="small">La sessione non è ancora iniziata</div>
+  </div>
+</div>
+
+<!-- FORM -->
+<div id="screen-form" class="screen">
+  <div class="form-header">
+    <div class="form-name">Ciao, <em id="formName">—</em></div>
+    <div class="form-sub">Inserisci i tuoi numeri per ogni anno. Sogna in grande.</div>
+  </div>
+
+  <div class="progress-bar-wrap">
+    <div class="progress-label" id="progressLabel">0 / 5 anni completati</div>
+    <div class="progress-bg"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+
+  <div class="years-nav" id="yearsNav"></div>
+  <div id="yearPanels"></div>
+
+  <div class="submit-bar">
+    <button class="submit-btn" id="submitBtn" onclick="submitNumbers()">Invia i miei numeri →</button>
+  </div>
+</div>
+
+<!-- INVIATO -->
+<div id="screen-done" class="screen">
+  <div class="center-msg">
+    <div class="done-icon">🚀</div>
+    <div class="done-title">Numeri inviati!</div>
+    <div class="done-sub">Guarda la visualizzazione collettiva sullo schermo dell'host.</div>
+  </div>
+</div>
+
+<div class="change-name" id="changeName">Non sei tu? Cambia</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script>
+var PLAYERS = ["Marco","Francesca","Tommaso","Margherita","Federica","Stefano","Daniele","Domitilla","Carola","Andrea","Giorgia"];
+var YEARS   = [2026, 2027, 2028, 2029, 2030];
+var METRICS = [
+  { key: "ricavi",     label: "Ricavi",          hint: "Es. 2.500.000", placeholder: "€ ..." },
+  { key: "ebitda",     label: "EBITDA",           hint: "Es. 400.000",   placeholder: "€ ..." },
+  { key: "clienti",    label: "Clienti",          hint: "Es. 500",       placeholder: "N ..." },
+  { key: "citta",      label: "Città",            hint: "Es. 8",         placeholder: "N ..." },
+  { key: "ricavifte",  label: "Ricavi x FTE",     hint: "Es. 120.000",   placeholder: "€ ..." }
+];
+
+firebase.initializeApp(firebaseConfig);
+var db = firebase.database();
+var numbersRoot = db.ref("cosaportoNumbers");
+var stateRef    = numbersRoot.child("state");
+var dataRef     = numbersRoot.child("data");
+
+var myName = localStorage.getItem("cosaportoNumbersPlayer");
+var localData = {}; // { year: { metric: value } }
+var currentYear = YEARS[0];
+
+function show(id) {
+  document.querySelectorAll(".screen").forEach(function(s){ s.classList.remove("active"); });
+  document.getElementById(id).classList.add("active");
+}
+
+// ── NOME ──
+function renderNameList() {
+  var list = document.getElementById("nameList");
+  list.innerHTML = "";
+  PLAYERS.forEach(function(p){
+    var btn = document.createElement("div");
+    btn.className = "name-btn";
+    btn.textContent = p;
+    btn.addEventListener("click", function(){
+      myName = p;
+      localStorage.setItem("cosaportoNumbersPlayer", p);
+      init();
+    });
+    list.appendChild(btn);
+  });
+}
+
+// ── FORM ──
+function buildForm() {
+  document.getElementById("formName").textContent = myName;
+
+  var nav = document.getElementById("yearsNav");
+  var panels = document.getElementById("yearPanels");
+  nav.innerHTML = "";
+  panels.innerHTML = "";
+
+  YEARS.forEach(function(yr, yi){
+    // Tab
+    var tab = document.createElement("div");
+    tab.className = "year-tab" + (yi === 0 ? " active" : "");
+    tab.id = "tab-" + yr;
+    tab.textContent = yr;
+    tab.addEventListener("click", function(){ switchYear(yr); });
+    nav.appendChild(tab);
+
+    // Panel
+    var panel = document.createElement("div");
+    panel.className = "year-panel" + (yi === 0 ? " active" : "");
+    panel.id = "panel-" + yr;
+
+    var html = "";
+    METRICS.forEach(function(m){
+      html += "<div class='metric-row'>" +
+        "<div class='metric-label'>" + m.label + "</div>" +
+        "<input class='metric-input' id='input-" + yr + "-" + m.key + "'" +
+        " type='text' inputmode='numeric' placeholder='" + m.placeholder + "'" +
+        " oninput='onInputChange(" + yr + ")' />" +
+        "<div class='metric-hint'>" + m.hint + "</div>" +
+        "</div>";
+    });
+
+    var prevBtn = yi > 0 ? "<button class='btn' onclick='switchYear(" + YEARS[yi-1] + ")'>← " + YEARS[yi-1] + "</button>" : "<div></div>";
+    var nextBtn = yi < YEARS.length-1 ? "<button class='btn primary' onclick='switchYear(" + YEARS[yi+1] + ")'>→ " + YEARS[yi+1] + "</button>" : "<div></div>";
+
+    html += "<div class='year-actions'>" + prevBtn + nextBtn + "</div>";
+    panel.innerHTML = html;
+    panels.appendChild(panel);
+  });
+}
+
+function switchYear(yr) {
+  currentYear = yr;
+  document.querySelectorAll(".year-tab").forEach(function(t){ t.classList.remove("active"); });
+  document.querySelectorAll(".year-panel").forEach(function(p){ p.classList.remove("active"); });
+  document.getElementById("tab-" + yr).classList.add("active");
+  document.getElementById("panel-" + yr).classList.add("active");
+}
+
+function onInputChange(yr) {
+  // Salva i valori dell'anno corrente
+  if (!localData[yr]) localData[yr] = {};
+  METRICS.forEach(function(m){
+    var el = document.getElementById("input-" + yr + "-" + m.key);
+    if (el) localData[yr][m.key] = el.value.trim();
+  });
+
+  // Aggiorna progress
+  var filledYears = YEARS.filter(function(y){
+    return localData[y] && METRICS.every(function(m){ return localData[y][m.key] && localData[y][m.key] !== ""; });
+  });
+
+  var pct = (filledYears.length / YEARS.length) * 100;
+  document.getElementById("progressFill").style.width = pct + "%";
+  document.getElementById("progressLabel").textContent = filledYears.length + " / " + YEARS.length + " anni completati";
+
+  // Marca tab completati
+  YEARS.forEach(function(y){
+    var tab = document.getElementById("tab-" + y);
+    if (!tab) return;
+    var isFilled = localData[y] && METRICS.every(function(m){ return localData[y][m.key] && localData[y][m.key] !== ""; });
+    tab.classList.toggle("filled", isFilled && y !== currentYear);
+  });
+
+  // Abilita submit se tutti i 5 anni sono compilati
+  var allDone = filledYears.length === YEARS.length;
+  document.getElementById("submitBtn").classList.toggle("ready", allDone);
+}
+
+function submitNumbers() {
+  // Costruisce oggetto da salvare
+  var payload = { name: myName, submittedAt: Date.now() };
+  YEARS.forEach(function(yr){
+    payload[yr] = localData[yr] || {};
+  });
+  dataRef.child(myName).set(payload).then(function(){
+    show("screen-done");
+  });
+}
+
+// ── INIT ──
+function init() {
+  if (!myName || PLAYERS.indexOf(myName) === -1) {
+    renderNameList();
+    show("screen-name");
+    return;
+  }
+
+  // Controlla se ha già inviato
+  dataRef.child(myName).once("value").then(function(snap){
+    if (snap.val() && snap.val().submittedAt) {
+      show("screen-done");
+      return;
+    }
+
+    stateRef.on("value", function(snap){
+      var s = snap.val() || { started: false };
+      if (!s.started) {
+        show("screen-waiting");
+      } else {
+        buildForm();
+        show("screen-form");
+        stateRef.off();
+      }
+    });
+  });
+}
+
+document.getElementById("changeName").addEventListener("click", function(){
+  localStorage.removeItem("cosaportoNumbersPlayer");
+  myName = null;
+  stateRef.off();
+  renderNameList();
+  show("screen-name");
+});
+
+renderNameList();
+init();
+</script>
+</body>
+</html>

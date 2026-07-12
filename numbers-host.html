@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>Sky is the limit · Host · CosaRetreat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --surface: #ffffff;
+    --surface2: #eeebe4;
+    --border: #dedad2;
+    --accent: #b8941e;
+    --text: #1a1814;
+    --muted: #5e5a54;
+    --success: #2a7a48;
+    --success-bg: #e8f5ee;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); font-family: 'DM Sans', sans-serif; color: var(--text); height: 100%; overflow: hidden; }
+
+  /* ── COVER ── */
+  #screen-cover {
+    width: 100vw; height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 4vw;
+  }
+  .cover-eyebrow {
+    font-family: 'DM Mono', monospace; font-size: clamp(0.65rem, 1vw, 0.85rem);
+    letter-spacing: 0.15em; color: var(--accent); text-transform: uppercase; margin-bottom: 0.5em;
+  }
+  .cover-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(3rem, 8vw, 7rem);
+    color: var(--text); letter-spacing: -3px; line-height: 1; margin-bottom: 0.15em;
+  }
+  .cover-title em { color: var(--accent); font-style: italic; }
+  .cover-sub {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1rem, 2vw, 1.6rem);
+    color: var(--muted); font-style: italic; margin-bottom: 2em;
+  }
+  .share-box {
+    display: flex; align-items: center; gap: 0.8em;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 0.7em 1em;
+    margin-bottom: 1em; max-width: 560px; width: 100%;
+  }
+  .share-box span {
+    font-family: 'DM Mono', monospace;
+    font-size: clamp(0.65rem, 1.1vw, 0.85rem);
+    color: var(--muted); word-break: break-all; flex: 1;
+  }
+  .share-box button {
+    flex-shrink: 0; background: var(--accent); color: #fff;
+    border: none; padding: 0.45em 1.1em; border-radius: 20px;
+    font-family: 'DM Sans', sans-serif; font-weight: 600;
+    cursor: pointer; font-size: 0.8rem;
+  }
+
+  .players-waiting {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    justify-content: center; margin-bottom: 2em; max-width: 700px;
+  }
+  .player-chip {
+    font-size: clamp(0.75rem, 1.2vw, 1rem);
+    padding: 4px 14px; border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--surface); color: var(--muted);
+    transition: all 0.3s;
+  }
+  .player-chip.done { background: var(--success-bg); border-color: var(--success); color: var(--success); font-weight: 600; }
+
+  .btn-start {
+    background: var(--accent); color: #fff; border: none;
+    padding: 0.9em 2.8em;
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1rem, 1.6vw, 1.3rem);
+    border-radius: 40px; cursor: pointer;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .btn-start:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(184,148,30,0.35); }
+
+  .conn-badge {
+    position: fixed; top: 1.5vh; right: 2vw;
+    font-family: 'DM Mono', monospace; font-size: 0.65rem;
+    letter-spacing: 0.1em; color: var(--muted);
+    z-index: 100; display: flex; align-items: center; gap: 0.4em;
+  }
+  .conn-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); }
+  .conn-badge.ok .conn-dot { background: var(--success); }
+  .conn-badge.err .conn-dot { background: #c0503a; }
+
+  .logo-fixed {
+    position: fixed; bottom: 1.5vh; left: 2vw;
+    font-family: 'DM Serif Display', serif;
+    font-size: 0.9rem; color: var(--muted); z-index: 100;
+  }
+  .logo-fixed em { color: var(--accent); font-style: italic; }
+
+  /* ── RESULTS ── */
+  #screen-results {
+    display: none;
+    width: 100vw; height: 100vh;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .results-header {
+    padding: 1.5vh 2vw 1vh;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .results-title { font-family: 'DM Serif Display', serif; font-size: clamp(1.2rem, 2.5vw, 2rem); }
+  .results-title em { color: var(--accent); font-style: italic; }
+  .results-meta { font-size: clamp(0.65rem, 1vw, 0.85rem); color: var(--muted); }
+
+  .results-body {
+    flex: 1; overflow-y: auto; overflow-x: auto;
+    padding: 1.5vh 2vw 2vh;
+  }
+
+  /* TABELLA PER PERSONA */
+  .person-block { margin-bottom: 2.5vh; }
+  .person-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1rem, 1.8vw, 1.4rem);
+    color: var(--text); margin-bottom: 0.6vh;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .person-name .chip {
+    font-family: 'DM Mono', monospace; font-size: 0.65rem;
+    padding: 2px 8px; border-radius: 10px;
+    background: var(--success-bg); color: var(--success);
+    letter-spacing: 0.06em;
+  }
+  .person-name .chip.pending {
+    background: var(--surface2); color: var(--muted);
+  }
+
+  .numbers-table { width: 100%; border-collapse: collapse; }
+  .numbers-table th {
+    font-family: 'DM Mono', monospace; font-size: clamp(0.6rem, 0.9vw, 0.75rem);
+    font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); padding: 5px 10px; text-align: right;
+    border-bottom: 1px solid var(--border);
+  }
+  .numbers-table th:first-child { text-align: left; }
+  .numbers-table td {
+    font-size: clamp(0.75rem, 1.1vw, 0.9rem);
+    padding: 6px 10px; text-align: right;
+    border-bottom: 1px solid var(--surface2);
+    color: var(--text);
+  }
+  .numbers-table td:first-child { text-align: left; font-weight: 600; color: var(--muted); }
+  .numbers-table tr:last-child td { border-bottom: none; }
+  .numbers-table td.empty { color: var(--border); font-style: italic; font-size: 0.8rem; }
+  .numbers-table .year-col { color: var(--accent); font-family: 'DM Mono', monospace; }
+
+  .table-wrap {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; overflow: hidden;
+  }
+
+  /* CONTROLS */
+  .controls-bar {
+    padding: 1vh 2vw; border-top: 1px solid var(--border);
+    display: flex; gap: 10px; align-items: center; flex-shrink: 0;
+    background: var(--bg);
+  }
+  .ctrl-btn {
+    padding: 0.6em 1.4em; border-radius: 8px; border: 1px solid var(--border);
+    font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500;
+    cursor: pointer; background: var(--surface); color: var(--text);
+    transition: all 0.15s;
+  }
+  .ctrl-btn:hover { border-color: var(--accent); }
+  .ctrl-btn.danger { color: #c0503a; border-color: #f0c0b8; }
+  .ctrl-btn.danger:hover { background: #fce8e6; }
+
+  .submitted-count {
+    font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--muted);
+    margin-left: auto;
+  }
+  .submitted-count b { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="conn-badge" id="connBadge"><span class="conn-dot"></span><span id="connText">Connessione...</span></div>
+<div class="logo-fixed">Cosa<em>Retreat</em></div>
+
+<!-- COVER -->
+<div id="screen-cover">
+  <div class="cover-eyebrow">CosaRetreat · 28 Luglio 2026</div>
+  <div class="cover-title">Sky is<br><em>the limit</em></div>
+  <div class="cover-sub">5 Numeri per la nostra Cosaporto</div>
+
+  <div class="share-box">
+    <span id="shareLink">caricamento...</span>
+    <button id="btnCopy">Copia link</button>
+  </div>
+
+  <div class="players-waiting" id="playersWaiting"></div>
+
+  <button class="btn-start" id="btnStart">Avvia la sessione →</button>
+</div>
+
+<!-- RESULTS -->
+<div id="screen-results">
+  <div class="results-header">
+    <div class="results-title">Sky is <em>the limit</em></div>
+    <div class="results-meta" id="resultsMeta">0 / 11 risposte ricevute</div>
+  </div>
+  <div class="results-body" id="resultsBody"></div>
+  <div class="controls-bar">
+    <button class="ctrl-btn" onclick="window.print()">🖨️ Stampa</button>
+    <button class="ctrl-btn danger" onclick="resetSession()">Reset sessione</button>
+    <div class="submitted-count" id="submittedCount"><b>0</b> / 11 inviati</div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script>
+var PLAYERS = ["Marco","Francesca","Tommaso","Margherita","Federica","Stefano","Daniele","Domitilla","Carola","Andrea","Giorgia"];
+var YEARS   = [2026, 2027, 2028, 2029, 2030];
+var METRICS = [
+  { key: "ricavi",    label: "Ricavi" },
+  { key: "ebitda",    label: "EBITDA" },
+  { key: "clienti",   label: "Clienti" },
+  { key: "citta",     label: "Città" },
+  { key: "ricavifte", label: "Ricavi x FTE" }
+];
+
+firebase.initializeApp(firebaseConfig);
+var db = firebase.database();
+var numbersRoot = db.ref("cosaportoNumbers");
+var stateRef    = numbersRoot.child("state");
+var dataRef     = numbersRoot.child("data");
+
+// Connessione
+db.ref(".info/connected").on("value", function(snap){
+  var badge = document.getElementById("connBadge");
+  badge.className = "conn-badge " + (snap.val() ? "ok" : "err");
+  document.getElementById("connText").textContent = snap.val() ? "Connesso" : "Disconnesso";
+});
+
+// Share link
+var playerUrl = new URL("numbers-player.html", window.location.href).toString();
+document.getElementById("shareLink").textContent = playerUrl;
+document.getElementById("btnCopy").addEventListener("click", function(){
+  navigator.clipboard.writeText(playerUrl).then(function(){
+    var btn = document.getElementById("btnCopy");
+    var old = btn.textContent;
+    btn.textContent = "Copiato!";
+    setTimeout(function(){ btn.textContent = old; }, 1500);
+  });
+});
+
+// Chips giocatori nella cover
+var waitingEl = document.getElementById("playersWaiting");
+PLAYERS.forEach(function(p){
+  var chip = document.createElement("div");
+  chip.className = "player-chip";
+  chip.id = "chip-" + p;
+  chip.textContent = p;
+  waitingEl.appendChild(chip);
+});
+
+// Avvia sessione
+document.getElementById("btnStart").addEventListener("click", function(){
+  stateRef.set({ started: true, startedAt: Date.now() });
+});
+
+// Listener dati
+var allData = {};
+
+dataRef.on("value", function(snap){
+  allData = snap.val() || {};
+
+  // Aggiorna chip cover
+  PLAYERS.forEach(function(p){
+    var chip = document.getElementById("chip-" + p);
+    if (!chip) return;
+    chip.classList.toggle("done", !!(allData[p] && allData[p].submittedAt));
+  });
+
+  // Conta inviati
+  var submitted = PLAYERS.filter(function(p){ return allData[p] && allData[p].submittedAt; }).length;
+  document.getElementById("submittedCount").innerHTML = "<b>" + submitted + "</b> / " + PLAYERS.length + " inviati";
+  if (document.getElementById("resultsMeta")) {
+    document.getElementById("resultsMeta").textContent = submitted + " / " + PLAYERS.length + " risposte ricevute";
+  }
+
+  renderResults();
+});
+
+stateRef.on("value", function(snap){
+  var s = snap.val() || { started: false };
+  if (s.started) {
+    document.getElementById("screen-cover").style.display = "none";
+    document.getElementById("screen-results").style.display = "flex";
+  } else {
+    document.getElementById("screen-cover").style.display = "flex";
+    document.getElementById("screen-results").style.display = "none";
+  }
+});
+
+function renderResults() {
+  var body = document.getElementById("resultsBody");
+  if (!body) return;
+
+  body.innerHTML = "";
+
+  PLAYERS.forEach(function(p){
+    var entry = allData[p];
+    var hasSent = !!(entry && entry.submittedAt);
+
+    var block = document.createElement("div");
+    block.className = "person-block";
+
+    var chipHtml = hasSent
+      ? "<span class='chip'>✓ inviato</span>"
+      : "<span class='chip pending'>in attesa...</span>";
+
+    var tableHtml = "<div class='table-wrap'><table class='numbers-table'><thead><tr>" +
+      "<th>Metrica</th>" +
+      YEARS.map(function(yr){ return "<th class='year-col'>" + yr + "</th>"; }).join("") +
+      "</tr></thead><tbody>";
+
+    METRICS.forEach(function(m){
+      tableHtml += "<tr><td>" + m.label + "</td>";
+      YEARS.forEach(function(yr){
+        var val = entry && entry[yr] && entry[yr][m.key];
+        tableHtml += val
+          ? "<td>" + val + "</td>"
+          : "<td class='empty'>—</td>";
+      });
+      tableHtml += "</tr>";
+    });
+
+    tableHtml += "</tbody></table></div>";
+
+    block.innerHTML =
+      "<div class='person-name'>" + p + " " + chipHtml + "</div>" +
+      tableHtml;
+
+    body.appendChild(block);
+  });
+}
+
+function resetSession() {
+  if (!confirm("Sei sicuro? Tutti i numeri inseriti verranno cancellati.")) return;
+  numbersRoot.remove().then(function(){
+    stateRef.set({ started: false });
+  });
+}
+</script>
+</body>
+</html>

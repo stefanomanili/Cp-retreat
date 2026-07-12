@@ -576,6 +576,7 @@
   <button class="nav-btn" onclick="showSection('feedback', this)">Scheda Feedback</button>
   <button class="nav-btn" onclick="showSection('timer', this)">⏱ Timer</button>
   <button class="nav-btn" onclick="showSection('quiz', this)">🎮 Quiz</button>
+  <button class="nav-btn" onclick="showSection('sky', this)">🚀 Sky is the limit</button>
 </nav>
 
 <!-- ══════════ AGENDA ══════════ -->
@@ -625,17 +626,33 @@
   </div>
 
   <div class="agenda-row">
+    <div class="agenda-time">15:00</div>
+    <div class="agenda-content">
+      <div class="agenda-title">Sky is the limit <span class="agenda-pill">Workshop</span></div>
+      <div class="agenda-desc">5 Numeri per la nostra Cosaporto.</div>
+    </div>
+  </div>
+
+  <div class="agenda-row">
     <div class="agenda-time">15:30</div>
     <div class="agenda-content">
-      <div class="agenda-title">Teamwork: Sky is the limit? <span class="agenda-pill">Workshop</span></div>
-      <div class="agenda-desc">Sessione collettiva di apertura. Dove vogliamo arrivare e cosa ci frena davvero.</div>
+      <div class="agenda-title">AIdeas <span class="agenda-pill">Presentazioni</span></div>
+      <div class="agenda-desc">5 idee che ci faranno volare. Margherita, Carola, Fede, Tommy e Franci presentano le idee AI based.</div>
     </div>
   </div>
 
   <div class="agenda-row">
     <div class="agenda-time">17:00</div>
     <div class="agenda-content">
-      <div class="agenda-title">Relax e quick daily business management <span class="agenda-pill">3h</span></div>
+      <div class="agenda-title">La macchina degli appuntamenti 🏆 <span class="agenda-pill">Quiz</span></div>
+      <div class="agenda-desc">Chi vince si rilassa di più! 💆</div>
+    </div>
+  </div>
+
+  <div class="agenda-row">
+    <div class="agenda-time">17:30</div>
+    <div class="agenda-content">
+      <div class="agenda-title">Relax e quick daily business management</div>
       <div class="agenda-desc">Spazio libero per ricaricare, sistemare le urgenze, godersi il posto.</div>
     </div>
   </div>
@@ -655,8 +672,8 @@
   <div class="agenda-row">
     <div class="agenda-time">22:30</div>
     <div class="agenda-content">
-      <div class="agenda-title">Brieffettino volante <span class="agenda-pill">Serale</span></div>
-      <div class="agenda-desc">Recap veloce della giornata, allineamento su domani.</div>
+      <div class="agenda-title">Catalogo Natale 🎄</div>
+      <div class="agenda-desc">Panettone o Champagne? Facciamo entrambi?</div>
     </div>
   </div>
 
@@ -673,8 +690,8 @@
   <div class="agenda-row">
     <div class="agenda-time">09:30</div>
     <div class="agenda-content">
-      <div class="agenda-title">Rossella Cerea — Excellence state of mind <span class="agenda-pill">Speaker</span></div>
-      <div class="agenda-desc">Mindset d'eccellenza applicato al business e alla vita.</div>
+      <div class="agenda-title">Quick daily business management</div>
+      <div class="agenda-desc">Aggiornamenti operativi, priorità del giorno, allineamento veloce.</div>
     </div>
   </div>
 
@@ -695,6 +712,14 @@
   </div>
 
   <div class="agenda-row">
+    <div class="agenda-time">11:30</div>
+    <div class="agenda-content">
+      <div class="agenda-title">Video Cosaporto 🎬</div>
+      <div class="agenda-desc">Marghe, Franci, Carola, Fede e Tommy ci dicono perché Cosaporto è magica.</div>
+    </div>
+  </div>
+
+  <div class="agenda-row">
     <div class="agenda-time">12:00</div>
     <div class="agenda-content">
       <div class="agenda-title">Relax <span class="agenda-pill">1h30</span></div>
@@ -709,7 +734,7 @@
   </div>
 
   <div class="agenda-row">
-    <div class="agenda-time">15:00</div>
+    <div class="agenda-time">16:00</div>
     <div class="agenda-content">
       <div class="agenda-title">Relax e daily business management <span class="agenda-pill">2h</span></div>
       <div class="agenda-desc">Chiusura del retreat. Spazio per next steps individuali.</div>
@@ -927,6 +952,45 @@
       4. Carica tutti e 5 i file su GitHub: <code style="font-family:'DM Mono',monospace">index.html, host.html, player.html, quiz-data.js, firebase-config.js</code>
     </p>
   </div>
+</section>
+
+<!-- ══════════ SKY IS THE LIMIT ══════════ -->
+<section class="section" id="sky">
+  <h1>Sky is<br><em>the limit</em></h1>
+  <p class="subtitle">5 Numeri per la nostra Cosaporto — ogni persona inserisce la sua visione per 2026–2030. L'host raccoglie tutto in tempo reale.</p>
+  <hr class="divider">
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px">
+    <div class="card" style="text-align:center">
+      <h3 style="margin-bottom:12px">🖥️ Conduttore</h3>
+      <p style="color:var(--muted);font-size:13px;margin-bottom:16px">Avvia la sessione e visualizza in tempo reale le tabelle di tutti i partecipanti.</p>
+      <a href="numbers-host.html" target="_blank" class="btn primary" style="display:inline-block;text-decoration:none;padding:10px 20px">Apri Host →</a>
+    </div>
+    <div class="card" style="text-align:center">
+      <h3 style="margin-bottom:12px">📱 Partecipanti</h3>
+      <p style="color:var(--muted);font-size:13px;margin-bottom:16px">Ogni partecipante inserisce i suoi 5 numeri per i 5 anni dal proprio telefono.</p>
+      <a href="numbers-player.html" target="_blank" class="btn" style="display:inline-block;text-decoration:none;padding:10px 20px">Apri Player →</a>
+    </div>
+  </div>
+
+  <div class="card" style="text-align:center">
+    <h3 style="margin-bottom:16px">QR Code — Player</h3>
+    <div style="display:flex;justify-content:center;margin-bottom:16px">
+      <canvas id="qr-sky-canvas" width="180" height="180" style="border-radius:8px;border:4px solid var(--border)"></canvas>
+    </div>
+    <p style="color:var(--muted);font-size:13px">Punta a <code style="font-family:'DM Mono',monospace;color:var(--accent)">numbers-player.html</code> — funziona appena pubblichi su GitHub Pages.</p>
+  </div>
+
+  <hr class="divider">
+  <h3 style="margin-bottom:16px">Metriche richieste</h3>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:8px">
+    ${["Ricavi","EBITDA","Clienti","Città","Ricavi x FTE"].map(m =>
+      `<div class="card" style="text-align:center;padding:16px 12px">
+        <div style="font-size:13px;font-weight:600;color:var(--text)">${m}</div>
+      </div>`
+    ).join('')}
+  </div>
+  <p style="font-size:12px;color:var(--muted);margin-top:8px">Per ogni anno: 2026 · 2027 · 2028 · 2029 · 2030</p>
 </section>
 
 <script>
@@ -1356,16 +1420,16 @@ function resetTimer() {
 // ── QUIZ SECTION ──
 const QUIZ_PLAYERS = ["Marco","Francesca","Tommaso","Margherita","Federica","Stefano","Daniele","Domitilla","Carola","Andrea","Giorgia"];
 const QUIZ_QUESTIONS = [
-  {q:"Qual è il pilastro fondamentale di un sistema di acquisizione clienti efficace?", ans:"Un sistema prevedibile e replicabile"},
-  {q:"Quanti venditori B2B si arrendono dopo il primo mancato riscontro dal prospect?", ans:"Il 44%"},
-  {q:"In una cold email efficace, a quale domanda deve rispondere ogni frase del corpo?", ans:"Cosa ci guadagna chi legge?"},
-  {q:"Come si costruisce un database di prospect secondo il metodo?", ans:"Filtrando su segnali concreti: tecnologie, crescita, assunzioni"},
-  {q:"Qual è l'errore più comune nella CTA di una prima email a freddo?", ans:"Chiedere troppo subito (es. call di 45 minuti)"},
-  {q:"Qual è il mindset vincente nel follow-up?", ans:"Offro valore reale e il timing cambierà"},
-  {q:"Cos'è lo show-up rate?", ans:"La percentuale di appuntamenti fissati che avvengono davvero"},
-  {q:"Cosa descrive la filosofia del follow-up multicanale?", ans:"Integrare LinkedIn o una call moltiplica le possibilità senza saturare"},
-  {q:"Quanto conta la qualità del database rispetto al testo dell'email?", ans:"L'80% del tempo va ai dati: la lista è la regola più importante"},
-  {q:"Come si definisce la persistenza professionale nel metodo?", ans:"Cambiare angolo ad ogni touchpoint aggiungendo valore reale"}
+  {q:"Qual è il pilastro fondamentale di un sistema di acquisizione clienti efficace?"},
+  {q:"Quanti venditori B2B si arrendono dopo il primo mancato riscontro dal prospect?"},
+  {q:"In una cold email efficace, a quale domanda deve rispondere ogni frase del corpo?"},
+  {q:"Come si costruisce un database di prospect secondo il metodo?"},
+  {q:"Qual è l'errore più comune nella CTA di una prima email a freddo?"},
+  {q:"Qual è il mindset vincente nel follow-up secondo Koci?"},
+  {q:"Cos'è lo show-up rate e perché è importante?"},
+  {q:"Cosa descrive meglio la filosofia del follow-up multicanale?"},
+  {q:"Quanto conta la qualità del database rispetto al testo dell'email?"},
+  {q:"Come si definisce la persistenza professionale nel metodo?"}
 ];
 
 function renderQuizSection() {
@@ -1377,7 +1441,7 @@ function renderQuizSection() {
     ).join('');
   }
 
-  // Domande
+  // Domande — solo testo, nessuna risposta visibile
   const questionsEl = document.getElementById('quiz-questions-list');
   if (questionsEl) {
     questionsEl.innerHTML = QUIZ_QUESTIONS.map((q, i) => `
@@ -1385,7 +1449,6 @@ function renderQuizSection() {
         <div class="agenda-time" style="min-width:32px;font-size:13px">${i+1}</div>
         <div class="agenda-content">
           <div class="agenda-title" style="font-size:13px">${q.q}</div>
-          <div class="agenda-desc">✓ ${q.ans}</div>
         </div>
       </div>
     `).join('');
@@ -1421,6 +1484,13 @@ renderObiezioni();
 renderScenario();
 renderScoreGrid();
 renderQuizSection();
+
+// QR Sky
+const skyCanvas = document.getElementById('qr-sky-canvas');
+if (skyCanvas) {
+  const skyUrl = window.location.href.replace('index.html','').replace(/\/$/, '') + '/numbers-player.html';
+  generateSimpleQR(skyCanvas, skyUrl);
+}
 
 const circle = document.getElementById('timer-circle');
 circle.style.strokeDasharray = circumference;
