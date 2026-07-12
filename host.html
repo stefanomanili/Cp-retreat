@@ -308,7 +308,10 @@
 </head>
 <body>
 
-<div class="logo-fixed"><a href="index.html" style="text-decoration:none;color:inherit">Cosa<em>Retreat</em></a> <span style="font-size:0.7rem;color:var(--border)">·</span> <a href="index.html" style="font-family:'DM Sans',sans-serif;font-size:0.75rem;color:var(--muted);text-decoration:none;">← Home</a></div>
+<div class="logo-fixed">Cosa<em>Retreat</em></div><div style="position:fixed;bottom:16px;right:16px;z-index:100"><a href="index.html" style="font-family:'Montserrat',sans-serif;font-size:0.75rem;color:#5e5a54;text-decoration:none;">← Torna all'Agenda</a></div>
+<div style="position:fixed;top:16px;left:16px;z-index:100">
+  <button onclick="resetAllData()" style="background:none;border:1px solid #f0c0b8;color:#c0503a;padding:6px 14px;border-radius:20px;font-family:'Montserrat',sans-serif;font-size:0.72rem;font-weight:600;cursor:pointer;">🗑️ Reset</button>
+</div>
 <div class="conn-badge" id="connBadge"><span class="conn-dot"></span><span id="connText">Connessione...</span></div>
 
 <!-- COVER -->
