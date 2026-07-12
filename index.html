@@ -1487,7 +1487,7 @@ const QUIZ_QUESTIONS = [
   {q:"In una cold email efficace, a quale domanda deve rispondere ogni frase del corpo?"},
   {q:"Come si costruisce un database di prospect secondo il metodo?"},
   {q:"Qual è l'errore più comune nella CTA di una prima email a freddo?"},
-  {q:"Qual è il mindset vincente nel follow-up secondo Koci?"},
+  {q:"Qual è il mindset vincente nel follow-up?"},
   {q:"Cos'è lo show-up rate e perché è importante?"},
   {q:"Cosa descrive meglio la filosofia del follow-up multicanale?"},
   {q:"Quanto conta la qualità del database rispetto al testo dell'email?"},
@@ -1609,7 +1609,20 @@ const SKY_KEY     = "cosaportoSharedNumbers";
 
 function buildSharedTable() {
   const tbody = document.getElementById('shared-tbody');
+  const thead = document.getElementById('shared-thead');
   if (!tbody) return;
+
+  // Ricostruisce sempre l'header
+  if (thead) {
+    const thStyle = "font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface2);";
+    let row = '<tr><th style="' + thStyle + 'text-align:left;color:var(--muted)">Metrica</th>';
+    ['2026','2027','2028','2029','2030'].forEach(function(y){
+      row += '<th style="' + thStyle + 'text-align:right;color:var(--accent)">' + y + '</th>';
+    });
+    row += '</tr>';
+    thead.innerHTML = row;
+  }
+
   const saved = JSON.parse(localStorage.getItem(SKY_KEY) || '{}');
 
   tbody.innerHTML = SKY_METRICS.map((metric, mi) => {
@@ -1623,7 +1636,7 @@ function buildSharedTable() {
           placeholder="—"
           oninput="saveSharedTable()"
           style="width:100%;border:none;background:transparent;padding:9px 14px;
-                 font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);
+                 font-family:'Montserrat',sans-serif;font-size:13px;color:var(--text);
                  text-align:right;outline:none;cursor:text;"
           onfocus="this.style.background='#fff8ec'"
           onblur="this.style.background='transparent'"

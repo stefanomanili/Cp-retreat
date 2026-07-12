@@ -316,7 +316,7 @@
   <div class="cover-content">
     <div class="cover-eyebrow">CosaRetreat · Sales Workshop</div>
     <div class="cover-quiz">Quiz<br><em>Sales Challenge</em></div>
-    <div class="cover-title">La Macchina degli Appuntamenti — Arnold Koci</div>
+    <div class="cover-title">La Macchina degli Appuntamenti</div>
     <div class="cover-sep"></div>
     <div class="cover-sub">10 domande · Chi ne sa di più?</div>
     <div class="players-label">Partecipanti</div>
@@ -366,6 +366,7 @@
   </div>
   <div class="sb-footer">9-10 Closer Sistematico · 7-8 Cacciatore con Metodo · 5-6 Venditore in Transizione · 0-4 Talento Grezzo</div>
   <button class="btn-restart" id="btnRestart">Ricomincia</button>
+  <button onclick="resetAllData()" style="margin-top:10px;background:none;border:1px solid #f0c0b8;color:#c0503a;padding:0.5em 1.8em;border-radius:30px;font-family:'Montserrat',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;">🗑️ Reset completo (test)</button>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -611,6 +612,13 @@ stateRef.on("value", function(snap){
     }
   });
 });
+
+function resetAllData() {
+  if (!confirm("Reset completo: cancella tutte le risposte e i punteggi?")) return;
+  answersRef.remove();
+  scoresRef.remove();
+  stateRef.set({started:false, currentQ:0, revealed:false, finished:false});
+}
 
 document.getElementById("btnStart").addEventListener("click", startQuiz);
 document.getElementById("btnReveal").addEventListener("click", revealAnswer);

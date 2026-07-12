@@ -147,6 +147,7 @@
     <div class="sidebar-section">Controlli</div>
     <button class="btn-activate" id="btnActivate" onclick="activateScenario()">▶ Attiva scenario</button>
     <button class="btn-stop" id="btnStop" onclick="stopScenario()" style="display:none">⏹ Chiudi feedback</button>
+    <button onclick="resetFeedbackData()" style="margin-top:8px;width:100%;padding:0.6em;border-radius:8px;border:1px solid #f0c0b8;font-family:'Montserrat',sans-serif;font-size:0.8rem;font-weight:600;color:#c0503a;background:none;cursor:pointer;">🗑️ Reset completo (test)</button>
 
     <div class="share-box">
       <span class="share-url" id="shareUrl">—</span>
@@ -286,6 +287,11 @@ function updateUI() {
 
 function activateScenario() {
   stateRef.set({ active: true, scenarioIdx: selectedIdx, activatedAt: Date.now() });
+}
+
+function resetFeedbackData() {
+  if (!confirm("Cancellare tutti i voti feedback?")) return;
+  fbRoot.remove().then(function(){ stateRef.set({ active: false, scenarioIdx: null }); });
 }
 
 function stopScenario() {
