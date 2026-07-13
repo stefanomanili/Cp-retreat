@@ -983,6 +983,17 @@
 
 <script>
 
+// ── VARIABILI CONDIVISE ──
+var LABELS  = ["A","B","C","D"];
+var QUESTIONS = []; // usato solo in host.html/player.html via quiz-data.js
+var PLAYERS = ["Marco","Francesca","Tommaso","Margherita","Federica","Stefano","Daniele","Domitilla","Carola","Andrea","Giorgia"];
+var PROFILES = [
+  {min:9, label:"Il Closer Sistematico"},
+  {min:7, label:"Il Cacciatore con Metodo"},
+  {min:5, label:"Il Venditore in Transizione"},
+  {min:0, label:"Il Talento Grezzo"}
+];
+
 // ── NAV ──
 function showSection(id, btn) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -1459,7 +1470,7 @@ function buildSkyMetrics() {
   if (thead && !thead.innerHTML) {
     var thStyle = "font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface2);";
     var row = '<tr><th style="' + thStyle + 'text-align:left;color:var(--muted)">Metrica</th>';
-    ['2026','2027','2028','2029','2030'].forEach(function(y){
+    ['2027','2030'].forEach(function(y){
       row += '<th style="' + thStyle + 'text-align:right;color:var(--accent)">' + y + '</th>';
     });
     row += '</tr>';
@@ -1505,7 +1516,7 @@ function buildFeedbackSection() {
 
 // ── SHARED TABLE ──
 const SKY_METRICS = ["Ricavi", "EBITDA", "Clienti", "Città", "FTE"];
-const SKY_YEARS   = [2026, 2027, 2028, 2029, 2030];
+const SKY_YEARS   = [2027, 2030];
 const SKY_KEY     = "cosaportoSharedNumbers";
 
 function buildSharedTable() {
@@ -1517,7 +1528,7 @@ function buildSharedTable() {
   if (thead) {
     const thStyle = "font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface2);";
     let row = '<tr><th style="' + thStyle + 'text-align:left;color:var(--muted)">Metrica</th>';
-    ['2026','2027','2028','2029','2030'].forEach(function(y){
+    ['2027','2030'].forEach(function(y){
       row += '<th style="' + thStyle + 'text-align:right;color:var(--accent)">' + y + '</th>';
     });
     row += '</tr>';
@@ -1549,6 +1560,24 @@ function buildSharedTable() {
       ${cells}
     </tr>`;
   }).join('');
+}
+
+function formatNumber(val) {
+  // Rimuove tutto tranne cifre
+  var num = val.replace(/\D/g, '');
+  if (!num) return '';
+  // Aggiunge punto ogni 3 cifre da destra
+  return num.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
+function formatAndSave(input) {
+  var pos = input.selectionStart;
+  var oldLen = input.value.length;
+  input.value = formatNumber(input.value);
+  // Mantieni cursore approssimativo
+  var newLen = input.value.length;
+  input.selectionStart = input.selectionEnd = Math.max(0, pos + (newLen - oldLen));
+  saveSharedTable();
 }
 
 function saveSharedTable() {
