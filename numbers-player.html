@@ -175,7 +175,7 @@
 <script src="firebase-config.js"></script>
 <script>
 var PLAYERS = ["Marco","Francesca","Tommaso","Margherita","Federica","Stefano","Daniele","Domitilla","Carola","Andrea","Giorgia"];
-var YEARS   = [2026, 2027, 2028, 2029, 2030];
+var YEARS   = [2027, 2030];
 var METRICS = [
   { key: "ricavi",     label: "Ricavi",          hint: "Es. 2.500.000", placeholder: "€ ..." },
   { key: "ebitda",     label: "EBITDA",           hint: "Es. 400.000",   placeholder: "€ ..." },
@@ -245,7 +245,7 @@ function buildForm() {
         "<div class='metric-label'>" + m.label + "</div>" +
         "<input class='metric-input' id='input-" + yr + "-" + m.key + "'" +
         " type='text' inputmode='numeric' placeholder='" + m.placeholder + "'" +
-        " oninput='onInputChange(" + yr + ")' />" +
+        " oninput='formatNum(this);onInputChange(" + yr + ")' />" +
         "<div class='metric-hint'>" + m.hint + "</div>" +
         "</div>";
     });
@@ -265,6 +265,12 @@ function switchYear(yr) {
   document.querySelectorAll(".year-panel").forEach(function(p){ p.classList.remove("active"); });
   document.getElementById("tab-" + yr).classList.add("active");
   document.getElementById("panel-" + yr).classList.add("active");
+}
+
+function formatNum(input) {
+  var raw = input.value.replace(/\D/g, '');
+  if (!raw) { input.value = ''; return; }
+  input.value = raw.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
 function onInputChange(yr) {

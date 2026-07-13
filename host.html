@@ -367,8 +367,32 @@
     </div>
     <div id="sbRows"></div>
   </div>
-  <div class="sb-footer">9-10 Closer Sistematico · 7-8 Cacciatore con Metodo · 5-6 Venditore in Transizione · 0-4 Talento Grezzo</div>
-  <button class="btn-restart" id="btnRestart">Ricomincia</button>
+
+  <!-- CALLOUT PROFILI -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(6px,1vw,12px);margin-top:1.5vh;width:100%;max-width:1100px">
+    <div style="background:#fff8ec;border:1px solid var(--accent);border-radius:10px;padding:clamp(8px,1.2vw,14px)">
+      <div style="font-family:'DM Mono',monospace;font-size:clamp(0.55rem,0.8vw,0.7rem);color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px">9–10 punti</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:clamp(0.85rem,1.4vw,1.1rem);color:var(--text);margin-bottom:4px">Il Closer Sistematico</div>
+      <div style="font-size:clamp(0.6rem,0.9vw,0.75rem);color:var(--muted);line-height:1.5">Conosce il metodo a memoria. Sa costruire pipeline, fare follow-up con valore e chiudere con un passo successivo concreto. Un asset per il team.</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:clamp(8px,1.2vw,14px)">
+      <div style="font-family:'DM Mono',monospace;font-size:clamp(0.55rem,0.8vw,0.7rem);color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px">7–8 punti</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:clamp(0.85rem,1.4vw,1.1rem);color:var(--text);margin-bottom:4px">Il Cacciatore con Metodo</div>
+      <div style="font-size:clamp(0.6rem,0.9vw,0.75rem);color:var(--muted);line-height:1.5">Sa dove andare a cercare e come approcciare. Qualche lacuna nel follow-up o nella gestione delle obiezioni, ma la struttura c'è.</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:clamp(8px,1.2vw,14px)">
+      <div style="font-family:'DM Mono',monospace;font-size:clamp(0.55rem,0.8vw,0.7rem);color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px">5–6 punti</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:clamp(0.85rem,1.4vw,1.1rem);color:var(--text);margin-bottom:4px">Il Venditore in Transizione</div>
+      <div style="font-size:clamp(0.6rem,0.9vw,0.75rem);color:var(--muted);line-height:1.5">Intuizione commerciale presente, ma il metodo non è ancora interiorizzato. Con allenamento e strumenti giusti può crescere velocemente.</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:clamp(8px,1.2vw,14px)">
+      <div style="font-family:'DM Mono',monospace;font-size:clamp(0.55rem,0.8vw,0.7rem);color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px">0–4 punti</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:clamp(0.85rem,1.4vw,1.1rem);color:var(--text);margin-bottom:4px">Il Talento Grezzo</div>
+      <div style="font-size:clamp(0.6rem,0.9vw,0.75rem);color:var(--muted);line-height:1.5">Il potenziale c'è, ma il metodo va costruito da zero. Non è una critica — è il punto di partenza più onesto per imparare davvero.</div>
+    </div>
+  </div>
+
+  <button class="btn-restart" id="btnRestart" style="margin-top:1.5vh">Ricomincia</button>
   <button onclick="resetAllData()" style="margin-top:10px;background:none;border:1px solid #f0c0b8;color:#c0503a;padding:0.5em 1.8em;border-radius:30px;font-family:'Montserrat',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;">🗑️ Reset completo (test)</button>
 </div>
 
